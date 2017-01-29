@@ -22,6 +22,11 @@ public class Constants {
      */
     public static final String SUCCESSFUL_STATUS = "OK";
 
+    /**
+     * JSON tag of codeforces api query results
+     */
+    public static final String JSON_RESULTS = "result";
+
     public static final int MINIMAL_CONTEST_ID = 1;
     public static final int MAXIMAL_CONTEST_ID = 1_000_000;
 
