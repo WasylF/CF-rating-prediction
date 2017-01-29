@@ -65,6 +65,10 @@ public class RanklistRow {
     }
 
     public RanklistRow(JSONObject ranklistRow) {
+        setAll(ranklistRow);
+    }
+
+    public final void setAll(JSONObject ranklistRow) {
         this.party = new Party(ranklistRow.getJSONObject("party"));
         this.rank = JsonExtractor.getInt(ranklistRow, "rank");
         this.points = JsonExtractor.getDouble(ranklistRow, "points");

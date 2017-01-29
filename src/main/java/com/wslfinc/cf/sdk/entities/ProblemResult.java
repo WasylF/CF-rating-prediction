@@ -47,6 +47,10 @@ public class ProblemResult {
     }
 
     public ProblemResult(JSONObject problemResult) {
+        setAll(problemResult);
+    }
+
+    public final void setAll(JSONObject problemResult) {
         this.points = JsonExtractor.getDouble(problemResult, "points");
         this.penalty = JsonExtractor.getInt(problemResult, "penalty");
         this.rejectedAttemptCount = JsonExtractor.getInt(problemResult, "rejectedAttemptCount");

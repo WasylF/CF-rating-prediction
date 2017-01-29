@@ -128,6 +128,10 @@ public class User {
     }
 
     public User(JSONObject user) {
+        setAll(user);
+    }
+
+    public final void setAll(JSONObject user) {
         this.handle = JsonExtractor.getString(user, "handle");
         this.email = JsonExtractor.getString(user, "email");
         this.vkId = JsonExtractor.getString(user, "vkId");

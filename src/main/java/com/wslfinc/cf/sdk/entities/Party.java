@@ -67,6 +67,10 @@ public class Party {
     }
 
     public Party(JSONObject party) {
+        setAll(party);
+    }
+
+    public final void setAll(JSONObject party) {
         this.contestId = JsonExtractor.getInt(party, "contestId");
         this.members = JsonExtractor.getMembers(party);
         this.participantType = ParticipantType.valueOf(JsonExtractor.getString(party, "participantType"));

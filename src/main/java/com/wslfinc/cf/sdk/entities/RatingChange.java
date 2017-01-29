@@ -58,6 +58,10 @@ public class RatingChange {
     }
 
     public RatingChange(JSONObject ratingChange) {
+        setAll(ratingChange);
+    }
+
+    public final void setAll(JSONObject ratingChange) {
         this.contestId = JsonExtractor.getInt(ratingChange, "contestId");
         this.contestName = JsonExtractor.getString(ratingChange, "contestName");
         this.handle = JsonExtractor.getString(ratingChange, "handle");
