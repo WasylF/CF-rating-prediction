@@ -1,43 +1,16 @@
-package com.wslfinc.cf.sdk.api;
+package com.wslfinc.cf.sdk;
 
-import com.wslfinc.cf.sdk.entities.RatingChange;
-import com.wslfinc.helpers.Expectant;
+import com.wslfinc.cf.sdk.api.CodeForcesAPI;
+import com.wslfinc.cf.sdk.entities.*;
 import java.util.List;
-
-import static com.wslfinc.Constants.*;
-import com.wslfinc.cf.sdk.entities.Contest;
-import com.wslfinc.cf.sdk.entities.RanklistRow;
-import com.wslfinc.cf.sdk.entities.User;
-import java.time.LocalDateTime;
 
 /**
  *
  * @author Wsl_F
  */
-public class CodeForcesAPI {
+public class CodeForcesSDK {
 
-    private static final CodeForcesAPI instance = new CodeForcesAPI();
-
-    private long totalAPICalls;
-
-    private CodeForcesAPI() {
-        totalAPICalls = 0;
-    }
-
-    public static CodeForcesAPI getInstance() {
-        return instance;
-    }
-
-    private void beforeAPICall() {
-        Expectant.delay(API_DELAY_MS);
-        totalAPICalls++;
-        System.out.println("Doing API request #" + totalAPICalls
-                + ": " + LocalDateTime.now());
-    }
-
-    public long getTotalAPICalls() {
-        return this.totalAPICalls;
-    }
+    private final static CodeForcesAPI API = CodeForcesAPI.getInstance();
 
     /**
      *
@@ -45,8 +18,7 @@ public class CodeForcesAPI {
      * @return rating changes
      */
     public List<RatingChange> getRatingChanges(int contestId) {
-        beforeAPICall();
-        return ContestAPI.getRatingChanges(contestId);
+        return API.getRatingChanges(contestId);
     }
 
     /**
@@ -55,8 +27,7 @@ public class CodeForcesAPI {
      * @return rating changes
      */
     public List<Contest> getContestsList(boolean gym) {
-        beforeAPICall();
-        return ContestAPI.getContestsList(gym);
+        return API.getContestsList(gym);
     }
 
     /**
@@ -74,8 +45,7 @@ public class CodeForcesAPI {
      */
     public boolean getContestStanding(int contestId, int from, int count, boolean showUnofficial,
             Contest contest, Object problems, List<RanklistRow> rows) {
-        beforeAPICall();
-        return ContestAPI.getContestStanding(contestId, from, count, showUnofficial, contest, problems, rows);
+        return API.getContestStanding(contestId, from, count, showUnofficial, contest, problems, rows);
     }
 
     /**
@@ -85,8 +55,7 @@ public class CodeForcesAPI {
      * @return {@code User}
      */
     public User getUserInfo(String handle) {
-        beforeAPICall();
-        return UserAPI.getUserInfo(handle);
+        return API.getUserInfo(handle);
     }
 
     /**
@@ -96,8 +65,7 @@ public class CodeForcesAPI {
      * @return {@code List<User>}
      */
     public List<User> getUserInfo(List<String> handles) {
-        beforeAPICall();
-        return UserAPI.getUserInfo(handles);
+        return API.getUserInfo(handles);
     }
 
     /**
@@ -107,8 +75,7 @@ public class CodeForcesAPI {
      * @return
      */
     public List<RatingChange> getRatingHistory(String handle) {
-        beforeAPICall();
-        return UserAPI.getRatingHistory(handle);
+        return API.getRatingHistory(handle);
     }
 
 }
