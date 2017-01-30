@@ -7,7 +7,7 @@ import static com.wslfinc.Constants.*;
  *
  * @author Wsl_F
  */
-public class ResponseChecker {
+class ResponseChecker {
 
     /**
      * Check does {@code obj} valid response.

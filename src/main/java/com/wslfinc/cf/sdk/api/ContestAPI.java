@@ -7,14 +7,13 @@ import com.wslfinc.helpers.web.JsonReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  *
  * @author Wsl_F
  */
-public class ContestAPI {
+class ContestAPI {
 
     /**
      *

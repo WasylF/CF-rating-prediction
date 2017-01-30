@@ -4,8 +4,7 @@ import com.wslfinc.helpers.web.JsonReader;
 import org.json.JSONObject;
 
 import static com.wslfinc.Constants.*;
-import com.wslfinc.cf.sdk.entities.RatingChange;
-import com.wslfinc.cf.sdk.entities.User;
+import com.wslfinc.cf.sdk.entities.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -14,7 +13,7 @@ import org.json.JSONArray;
  *
  * @author Wsl_F
  */
-public class UserAPI {
+class UserAPI {
 
     /**
      * Returns information about one user.
@@ -22,7 +21,7 @@ public class UserAPI {
      * @param handle user handle
      * @return {@code User}
      */
-    public static User getUserInfo(String handle) {
+    static User getUserInfo(String handle) {
         List<String> user = new ArrayList<>();
         user.add(handle);
         List<User> result = getUserInfo(user);
@@ -35,7 +34,7 @@ public class UserAPI {
      * @param handles List of user handles
      * @return {@code List<User>}
      */
-    public static List<User> getUserInfo(List<String> handles) {
+    static List<User> getUserInfo(List<String> handles) {
         StringBuilder url = new StringBuilder(API_PREFIX + "/user.info?handles=");
         for (String handle : handles) {
             url.append(handle).append(';');
@@ -67,7 +66,7 @@ public class UserAPI {
      * @param handle User's handle
      * @return
      */
-    public static List<RatingChange> getRatingHistory(String handle) {
+    static List<RatingChange> getRatingHistory(String handle) {
         String url = API_PREFIX + "/user.rating?handle=" + handle;
         try {
             JSONObject response = JsonReader.read(url);
