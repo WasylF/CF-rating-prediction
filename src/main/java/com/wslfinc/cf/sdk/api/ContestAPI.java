@@ -48,7 +48,7 @@ class ContestAPI {
      */
     static List<Contest> getContestsList(boolean gym) {
         try {
-            String url = API_PREFIX + "\"/contest.list?gym=" + gym;
+            String url = API_PREFIX + "/contest.list?gym=" + gym;
             JSONObject response = JsonReader.read(url);
             if (ResponseChecker.isValid(response)) {
                 JSONArray array = response.getJSONArray(JSON_RESULTS);
