@@ -1,10 +1,8 @@
 package com.wslfinc.cf.sdk.api;
 
 import com.wslfinc.cf.sdk.entities.RatingChange;
-import com.wslfinc.helpers.Expectant;
 import java.util.List;
 
-import static com.wslfinc.Constants.*;
 import com.wslfinc.cf.sdk.entities.Contest;
 import com.wslfinc.cf.sdk.entities.RanklistRow;
 import com.wslfinc.cf.sdk.entities.User;
@@ -29,7 +27,6 @@ public class CodeForcesAPI {
     }
 
     private void beforeAPICall() {
-        Expectant.delay(API_DELAY_MS);
         totalAPICalls++;
         System.out.println("Doing API request #" + totalAPICalls
                 + ": " + LocalDateTime.now());

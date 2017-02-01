@@ -1,5 +1,7 @@
 package com.wslfinc.helpers.web;
 
+import static com.wslfinc.Constants.API_DELAY_MS;
+import com.wslfinc.helpers.Expectant;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +11,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -33,12 +34,22 @@ public class JsonReader {
         return text.toString();
     }
 
-    public static JSONObject read(final String url) throws IOException, JSONException {
-        try (InputStream is = new URL(url).openStream()) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readWhole(reader);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
+    public static JSONObject read(final String url) throws Exception {
+        Exception exception = null;
+        for (int i = 0; i < 3; i++) {
+            Expectant.delay((i + 1) * API_DELAY_MS);
+            try (InputStream is = new URL(url).openStream()) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                String jsonText = readWhole(reader);
+                JSONObject json = new JSONObject(jsonText);
+                return json;
+            } catch (Exception ex) {
+                System.err.println("Failed read url: " + url
+                        + " try #" + (i + 1) + "\n" + ex.getMessage());
+                exception = ex;
+            }
         }
+
+        throw exception;
     }
 }
