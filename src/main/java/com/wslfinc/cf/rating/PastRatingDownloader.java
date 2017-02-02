@@ -28,16 +28,30 @@ public class PastRatingDownloader {
         int nextRating = ratingChange.getNewRating();
 
         if (!rating.containsKey(handle)) {
-            rating.put(handle, new ArrayList<Integer>(currentMaxContestId));
+            rating.put(handle, new ArrayList<Integer>(currentMaxContestId + 1));
         }
 
+        addRating(handle, prevRating, nextRating);
+    }
+
+    private static ArrayList<Integer> addRating(String handle, int prevRating, int nextRating) {
         ArrayList<Integer> ratings = rating.get(handle);
-        ratings.ensureCapacity(currentMaxContestId);
-        while (ratings.size() < currentMaxContestId) {
+        ratings.ensureCapacity(currentMaxContestId + 1);
+        while (ratings.size() <= currentMaxContestId) {
             ratings.add(prevRating);
         }
+        ratings.set(currentMaxContestId, nextRating);
+        return ratings;
+    }
 
-        ratings.set(currentMaxContestId - 1, nextRating);
+    private static void addIfNotExists(int maxContestId) {
+        currentMaxContestId = maxContestId;
+
+        for (String handle : rating.keySet()) {
+            ArrayList<Integer> r = rating.get(handle);
+            int curRating = r.get(r.size() - 1);
+            addRating(handle, curRating, curRating);
+        }
     }
 
     public static boolean getRatingAfterContest(int maxContestId, String filePrefix) {
@@ -47,19 +61,23 @@ public class PastRatingDownloader {
         Collections.sort(contests);
 
         int n = contests.size();
-        currentMaxContestId = Math.min(contests.get(n - 1).getId(), maxContestId);
 
         for (int i = 0; i < n; i++) {
             int contestId = contests.get(i).getId();
             if (contestId > maxContestId) {
                 break;
             }
-            List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
-            for (RatingChange ratingChange : ratingChanges) {
-                addRatingChange(ratingChange);
+
+            if (CodeForcesSDK.isFinished(contestId)) {
+                currentMaxContestId = Math.max(contests.get(i).getId(), currentMaxContestId);
+                List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
+                for (RatingChange ratingChange : ratingChanges) {
+                    addRatingChange(ratingChange);
+                }
             }
         }
 
+        addIfNotExists(maxContestId);
         return writeToFiles(filePrefix);
     }
 
@@ -71,7 +89,7 @@ public class PastRatingDownloader {
         for (String handle : allHandles) {
             JSONObject user = new JSONObject();
             user.put("handle", handle);
-            user.put("rating", rating.get(handle).get(contestId - 1));
+            user.put("rating", rating.get(handle).get(contestId));
             list.add(user);
         }
         document.put(JSON_RESULTS, new JSONArray(list));
@@ -82,11 +100,11 @@ public class PastRatingDownloader {
     private static boolean writeToFiles(String filePrefix) {
         Set<String> allHandles = rating.keySet();
         boolean result = true;
-        for (int i = 0; i < currentMaxContestId; i++) {
+        for (int i = 0; i <= currentMaxContestId; i++) {
             try {
-                String fileName = filePrefix + "/contest_" + (i + 1) + ".html";
+                String fileName = filePrefix + "/contest_" + i + ".html";
                 BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName));
-                JSONObject json = getRating(i + 1, allHandles);
+                JSONObject json = getRating(i, allHandles);
                 json.write(writer);
                 writer.write("\n");
                 writer.close();
