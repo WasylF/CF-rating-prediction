@@ -1,4 +1,4 @@
-package com.wslfinc.cf.sdk.api;
+package com.wslfinc.cf.sdk;
 
 import org.json.JSONObject;
 import static com.wslfinc.Constants.*;
@@ -7,7 +7,7 @@ import static com.wslfinc.Constants.*;
  *
  * @author Wsl_F
  */
-class ResponseChecker {
+public class ResponseChecker {
 
     /**
      * Check does {@code obj} valid response.
@@ -15,7 +15,7 @@ class ResponseChecker {
      * @param obj JSON object
      * @return true if {@code obj} is valid CF response, false otherwise
      */
-    static boolean isValid(JSONObject obj) {
+    public static boolean isValid(JSONObject obj) {
         return obj != null && SUCCESSFUL_STATUS.equals(obj.getString("status"));
     }
 }
