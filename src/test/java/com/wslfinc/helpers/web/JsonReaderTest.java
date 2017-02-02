@@ -62,4 +62,20 @@ public class JsonReaderTest {
 
     }
 
+    @Test
+    public void testExistance() {
+        String url = "https://www.google.com";
+        boolean expected_result = true;
+        boolean received_result = JsonReader.isExists(url);
+        assertEquals(expected_result, received_result);
+    }
+
+    @Test
+    public void testExistance2() {
+        String url = "https://www.wslf.google.com";
+        boolean expected_result = false;
+        boolean received_result = JsonReader.isExists(url);
+        assertEquals(expected_result, received_result);
+    }
+
 }

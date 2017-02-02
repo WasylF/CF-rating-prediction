@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -51,5 +52,21 @@ public class JsonReader {
         }
 
         throw exception;
+    }
+
+    public static boolean isExists(final String urlString) {
+        try {
+            final URL url = new URL(urlString);
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            huc.setRequestMethod("HEAD");
+            int responseCode = huc.getResponseCode();
+
+            return responseCode == 200;
+        } catch (Exception ex) {
+            System.err.println("Failed to check existance of url: " + urlString
+                    + "\n" + ex.getMessage());
+        }
+
+        return false;
     }
 }
