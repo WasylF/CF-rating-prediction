@@ -1,12 +1,16 @@
 package com.wslfinc.cf.sdk;
 
 import static com.wslfinc.Constants.*;
+import com.wslfinc.cf.rating.RatingCalculator;
 import com.wslfinc.cf.sdk.api.CodeForcesAPI;
 import com.wslfinc.cf.sdk.entities.*;
 import com.wslfinc.cf.sdk.entities.additional.Contestant;
+import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
 import com.wslfinc.helpers.web.JsonReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -84,6 +88,17 @@ public class CodeForcesSDK {
         return API.getRatingHistory(handle);
     }
 
+    private static int getPreviousFinishedContest(int contestId) {
+        int previousContestId = contestId;
+        String url;
+        do {
+            previousContestId--;
+            url = PAST_RATING_URL_PREFIX + previousContestId + PAST_RATING_URL_SUFFIX;
+        } while (!JsonReader.isExists(url));
+
+        return previousContestId;
+    }
+
     /**
      * IT'S NOT OFFICIAL CODEFORCES API!!!
      *
@@ -91,12 +106,13 @@ public class CodeForcesSDK {
      *
      * @param contestId Id of the contest. It is not the round number. It can be
      * seen in contest URL. {@code 1 <= contestId <= MAXIMAL_CONTEST_ID}
-     * @return List of Contestant
+     * @return List of Contestant. Rank field of every contestant contains
+     * default value (-1).
      */
     public static List<Contestant> getAllContestants(int contestId) {
         try {
-            contestId--;
-            String url = PAST_RATING_URL_PREFIX + contestId + PAST_RATING_URL_SUFFIX;
+            int previousContestId = getPreviousFinishedContest(contestId);
+            String url = PAST_RATING_URL_PREFIX + previousContestId + PAST_RATING_URL_SUFFIX;
             JSONObject response = JsonReader.read(url);
             if (ResponseChecker.isValid(response)) {
                 JSONArray contestants = response.getJSONArray(JSON_RESULTS);
@@ -117,6 +133,47 @@ public class CodeForcesSDK {
     }
 
     /**
+     * IT'S NOT OFFICIAL CODEFORCES API!!!
+     *
+     * Getting rating of all contestants just before round № {@code contestId}
+     *
+     * @param contestId Id of the contest. It is not the round number. It can be
+     * seen in contest URL. {@code 1 <= contestId <= MAXIMAL_CONTEST_ID}
+     * @return List of Contestants that particapating in contest
+     * #{@code contestId}. All fields of Contestant are filled.
+     */
+    public static List<Contestant> getActiveContestants(int contestId) {
+        List<Contestant> registredContestants = getAllContestants(contestId);
+        List<RanklistRow> rows = getRanklistRows(contestId);
+
+        Map<String, Integer> prevRating = new HashMap<>();
+        for (Contestant contestant : registredContestants) {
+            prevRating.put(contestant.getHandle(), contestant.getPrevRating());
+        }
+
+        return getActiveContestants(registredContestants, prevRating, rows);
+    }
+
+    public static List<Contestant> getActiveContestants(List<Contestant> oldCOntestants,
+            Map<String, Integer> prevRating, List<RanklistRow> rows) {
+        List<Contestant> active = new ArrayList<>();
+        for (RanklistRow row : rows) {
+            for (Member member : row.getParty().getMembers()) {
+                String handle = member.getHandle();
+                if (!prevRating.containsKey(handle)) {
+                    prevRating.put(handle, INITIAL_RATING);
+                }
+
+                int prevR = prevRating.get(handle);
+                int rank = row.getRank();
+                active.add(new Contestant(handle, rank, prevR));
+            }
+        }
+
+        return active;
+    }
+
+    /**
      *
      * @param contestId Id of the contest. It is not the round number. It can be
      * seen in contest URL. {@code 1 <= contestId <= MAXIMAL_CONTEST_ID}
@@ -131,6 +188,20 @@ public class CodeForcesSDK {
     }
 
     /**
+     *
+     * @param contestId Id of the contest. It is not the round number. It can be
+     * seen in contest URL. {@code 1 <= contestId <= MAXIMAL_CONTEST_ID}
+     * @return all rows of ranklist
+     */
+    public static List<RanklistRow> getRanklistRows(int contestId) {
+        Contest contest = new Contest(contestId);
+        Object problems = new Object();
+        List<RanklistRow> rows = new ArrayList<>();
+        getContestStanding(contestId, 1, MAXIMAL_CONTESTANTS, false, contest, problems, rows);
+        return rows;
+    }
+
+    /**
      * Check has contest finished or not?
      *
      * @param contestId Id of the contest. It is not the round number. It can be
@@ -140,5 +211,16 @@ public class CodeForcesSDK {
     public static boolean isFinished(int contestId) {
         Contest contest = getContest(contestId);
         return contest.getPhase() == ContestPhase.FINISHED;
+    }
+
+    /**
+     * Calculates rating after round {@code  contestId}
+     * @param contestId
+     * @return nextRating for all contestants
+     */
+    public static List<ContestantResult> getNewRatings(int contestId) {
+        List<Contestant> active = getActiveContestants(contestId);
+        RatingCalculator ratingCalculator = new RatingCalculator(active);
+        return ratingCalculator.getNewRatings();
     }
 }
