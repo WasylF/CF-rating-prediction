@@ -102,6 +102,10 @@ public class Contest implements Comparable<Contest> {
      */
     String season;
 
+    public Contest(int id) {
+        this.id = id;
+    }
+    
     public Contest(int id, String name, ContestType type, ContestPhase phase, boolean frozen, int durationSeconds, int startTimeSeconds, int relativeTimeSeconds, String preparedBy, String websiteUrl, String description, int difficulty, String kind, String icpcRegion, String country, String city, String season) {
         this.id = id;
         this.name = name;
