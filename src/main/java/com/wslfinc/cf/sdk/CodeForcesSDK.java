@@ -115,4 +115,30 @@ public class CodeForcesSDK {
         return new ArrayList<>();
 
     }
+
+    /**
+     *
+     * @param contestId Id of the contest. It is not the round number. It can be
+     * seen in contest URL. {@code 1 <= contestId <= MAXIMAL_CONTEST_ID}
+     * @return contests
+     */
+    public static Contest getContest(int contestId) {
+        Contest contest = new Contest(contestId);
+        Object problems = new Object();
+        List<RanklistRow> rows = new ArrayList<>();
+        API.getContestStanding(contestId, 1, 1, false, contest, problems, rows);
+        return contest;
+    }
+
+    /**
+     * Check has contest finished or not?
+     *
+     * @param contestId Id of the contest. It is not the round number. It can be
+     * seen in contest URL. {@code 1 <= contestId <= MAXIMAL_CONTEST_ID}
+     * @return true if contest finished
+     */
+    public static boolean isFinished(int contestId) {
+        Contest contest = getContest(contestId);
+        return contest.getPhase() == ContestPhase.FINISHED;
+    }
 }
