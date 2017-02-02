@@ -35,4 +35,8 @@ public class Constants {
     public static final int NEGATIVE_INFINITY = -1_000_000_000;
 
     public static final String PATH_TO_TEST_FILES = "file://" + PATH_TO_PROJECT + "resources/for_tests/";
+
+    public static final String PAST_RATING_URL_PREFIX = "https://codeforcescontests.github.io/RatingAfterRounds/contests/contest_";
+    
+    public static final String PAST_RATING_URL_SUFFIX = ".html";
 }
