@@ -95,7 +95,7 @@ class ContestAPI {
                 JSONObject result = response.getJSONObject(JSON_RESULTS);
 
                 contest.setAll(result.getJSONObject("contest"));
-                problems = result.getJSONObject("problems");
+                problems = result.getJSONArray("problems");
                 JSONArray array = result.getJSONArray("rows");
 
                 rows.clear();
