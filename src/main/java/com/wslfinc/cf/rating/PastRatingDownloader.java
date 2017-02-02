@@ -66,15 +66,15 @@ public class PastRatingDownloader {
     private static JSONObject getRating(int contestId, Set<String> allHandles) {
         JSONObject document = new JSONObject();
 
-        document.append("status", SUCCESSFUL_STATUS);
+        document.put("status", SUCCESSFUL_STATUS);
         LinkedList<JSONObject> list = new LinkedList<>();
         for (String handle : allHandles) {
             JSONObject user = new JSONObject();
-            user.append("handle", handle);
-            user.append("rating", rating.get(handle).get(contestId - 1));
+            user.put("handle", handle);
+            user.put("rating", rating.get(handle).get(contestId - 1));
             list.add(user);
         }
-        document.append(JSON_RESULTS, new JSONArray(list));
+        document.put(JSON_RESULTS, new JSONArray(list));
 
         return document;
     }
@@ -91,6 +91,8 @@ public class PastRatingDownloader {
                 writer.write("\n");
                 writer.close();
             } catch (Exception ex) {
+                System.err.println("Couldn't write past rating to the files\n"
+                        + ex.getMessage());
                 result = false;
             }
         }
