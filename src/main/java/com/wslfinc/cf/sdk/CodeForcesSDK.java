@@ -1,18 +1,10 @@
 package com.wslfinc.cf.sdk;
 
-import static com.wslfinc.Constants.*;
 import com.wslfinc.cf.rating.RatingCalculator;
 import com.wslfinc.cf.sdk.api.CodeForcesAPI;
 import com.wslfinc.cf.sdk.entities.*;
-import com.wslfinc.cf.sdk.entities.additional.Contestant;
-import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
-import com.wslfinc.helpers.web.JsonReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.wslfinc.cf.sdk.entities.additional.*;
 import java.util.List;
-import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
@@ -20,7 +12,7 @@ import org.json.JSONObject;
  */
 public class CodeForcesSDK {
 
-    private final static CodeForcesAPI API = CodeForcesAPI.getInstance();
+    final static CodeForcesAPI API = CodeForcesAPI.getInstance();
 
     /**
      *
@@ -88,17 +80,6 @@ public class CodeForcesSDK {
         return API.getRatingHistory(handle);
     }
 
-    private static int getPreviousFinishedContest(int contestId) {
-        int previousContestId = contestId;
-        String url;
-        do {
-            previousContestId--;
-            url = PAST_RATING_URL_PREFIX + previousContestId + PAST_RATING_URL_SUFFIX;
-        } while (!JsonReader.isExists(url));
-
-        return previousContestId;
-    }
-
     /**
      * IT'S NOT OFFICIAL CODEFORCES API!!!
      *
@@ -110,26 +91,7 @@ public class CodeForcesSDK {
      * default value (-1).
      */
     public static List<Contestant> getAllContestants(int contestId) {
-        try {
-            int previousContestId = getPreviousFinishedContest(contestId);
-            String url = PAST_RATING_URL_PREFIX + previousContestId + PAST_RATING_URL_SUFFIX;
-            JSONObject response = JsonReader.read(url);
-            if (ResponseChecker.isValid(response)) {
-                JSONArray contestants = response.getJSONArray(JSON_RESULTS);
-
-                List<Contestant> result = new ArrayList<>();
-                for (Object contestant : contestants) {
-                    result.add(new Contestant((JSONObject) contestant));
-                }
-                return result;
-            }
-        } catch (Exception exception) {
-            System.err.println("Failed to get all contestants on contestId: " + contestId);
-            System.err.println(exception.getMessage());
-        }
-
-        return new ArrayList<>();
-
+        return ContestantProcessing.getAllContestants(contestId);
     }
 
     /**
@@ -143,34 +105,7 @@ public class CodeForcesSDK {
      * #{@code contestId}. All fields of Contestant are filled.
      */
     public static List<Contestant> getActiveContestants(int contestId) {
-        List<Contestant> registredContestants = getAllContestants(contestId);
-        List<RanklistRow> rows = getRanklistRows(contestId);
-
-        Map<String, Integer> prevRating = new HashMap<>();
-        for (Contestant contestant : registredContestants) {
-            prevRating.put(contestant.getHandle(), contestant.getPrevRating());
-        }
-
-        return getActiveContestants(registredContestants, prevRating, rows);
-    }
-
-    public static List<Contestant> getActiveContestants(List<Contestant> oldCOntestants,
-            Map<String, Integer> prevRating, List<RanklistRow> rows) {
-        List<Contestant> active = new ArrayList<>();
-        for (RanklistRow row : rows) {
-            for (Member member : row.getParty().getMembers()) {
-                String handle = member.getHandle();
-                if (!prevRating.containsKey(handle)) {
-                    prevRating.put(handle, INITIAL_RATING);
-                }
-
-                int prevR = prevRating.get(handle);
-                int rank = row.getRank();
-                active.add(new Contestant(handle, rank, prevR));
-            }
-        }
-
-        return active;
+        return ContestantProcessing.getActiveContestants(contestId);
     }
 
     /**
@@ -180,11 +115,7 @@ public class CodeForcesSDK {
      * @return contests
      */
     public static Contest getContest(int contestId) {
-        Contest contest = new Contest(contestId);
-        Object problems = new Object();
-        List<RanklistRow> rows = new ArrayList<>();
-        API.getContestStanding(contestId, 1, 1, false, contest, problems, rows);
-        return contest;
+        return ContestProcessing.getContest(contestId);
     }
 
     /**
@@ -194,11 +125,7 @@ public class CodeForcesSDK {
      * @return all rows of ranklist
      */
     public static List<RanklistRow> getRanklistRows(int contestId) {
-        Contest contest = new Contest(contestId);
-        Object problems = new Object();
-        List<RanklistRow> rows = new ArrayList<>();
-        getContestStanding(contestId, 1, MAXIMAL_CONTESTANTS, false, contest, problems, rows);
-        return rows;
+        return ContestProcessing.getRanklistRows(contestId);
     }
 
     /**
@@ -209,12 +136,12 @@ public class CodeForcesSDK {
      * @return true if contest finished
      */
     public static boolean isFinished(int contestId) {
-        Contest contest = getContest(contestId);
-        return contest.getPhase() == ContestPhase.FINISHED;
+        return ContestProcessing.isFinished(contestId);
     }
 
     /**
      * Calculates rating after round {@code  contestId}
+     *
      * @param contestId
      * @return nextRating for all contestants
      */
