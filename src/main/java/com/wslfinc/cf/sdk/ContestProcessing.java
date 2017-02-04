@@ -1,7 +1,7 @@
 package com.wslfinc.cf.sdk;
 
 import static com.wslfinc.cf.sdk.CodeForcesSDK.*;
-import static com.wslfinc.Constants.*;
+import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.entities.*;
 import com.wslfinc.helpers.web.JsonReader;
 import java.util.ArrayList;

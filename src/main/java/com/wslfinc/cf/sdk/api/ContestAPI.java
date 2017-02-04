@@ -1,6 +1,6 @@
 package com.wslfinc.cf.sdk.api;
 
-import static com.wslfinc.Constants.*;
+import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.ResponseChecker;
 import com.wslfinc.cf.sdk.entities.*;
 

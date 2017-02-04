@@ -1,6 +1,6 @@
 package com.wslfinc.cf.sdk.rating;
 
-import static com.wslfinc.Constants.*;
+import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.Contest;
 import com.wslfinc.cf.sdk.entities.RatingChange;

@@ -1,0 +1,5 @@
+/nbproject/
+/target/
+*.jar
+*.class
+/contests/

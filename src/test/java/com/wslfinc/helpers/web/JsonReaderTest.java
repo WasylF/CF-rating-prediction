@@ -4,7 +4,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import static com.wslfinc.Constants.*;
+import static com.wslfinc.cf.sdk.Constants.*;
 import org.json.JSONArray;
 
 /**

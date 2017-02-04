@@ -1,6 +1,6 @@
 package com.wslfinc.helpers.web;
 
-import static com.wslfinc.Constants.API_DELAY_MS;
+import static com.wslfinc.cf.sdk.Constants.API_DELAY_MS;
 import com.wslfinc.helpers.Expectant;
 import java.io.BufferedReader;
 import java.io.IOException;

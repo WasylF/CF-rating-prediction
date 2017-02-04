@@ -3,7 +3,7 @@ package com.wslfinc.cf.sdk.api;
 import com.wslfinc.helpers.web.JsonReader;
 import org.json.JSONObject;
 
-import static com.wslfinc.Constants.*;
+import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.ResponseChecker;
 import com.wslfinc.cf.sdk.entities.*;
 import java.util.ArrayList;

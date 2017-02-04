@@ -1,24 +1,22 @@
-package com.wslfinc.cf.sdk.entities;
+package com.wslfinc.cf.sdk.api;
 
-import static com.wslfinc.cf.sdk.Constants.PATH_TO_TEST_FILES;
-import com.wslfinc.helpers.web.JsonReader;
-import org.json.JSONObject;
+import com.wslfinc.cf.sdk.entities.User;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Wsl_F
+ * @author wslf
  */
-public class UserTest {
+public class UserAPITest {
 
-    public UserTest() {
+    public UserAPITest() {
     }
 
     @Test
-    public void testConStructorJSON() throws Exception {
-        JSONObject userJSON = JsonReader.read(PATH_TO_TEST_FILES + "User-Wsl_F.json");
-        User user = new User(userJSON);
+    public void testSomeMethod() {
+        //Test correct on 31 Jan 2017
+        User user = UserAPI.getUserInfo("Wsl_F");
         assertNotNull(user);
 
         long lastOnlineTime_expected = 1485289253;
@@ -84,6 +82,6 @@ public class UserTest {
         String titlePhoto_expected = "http://userpic.codeforces.com/68351/title/c2c321f53e7eb744.jpg";
         String titlePhoto_received = user.getTitlePhoto();
         assertEquals(titlePhoto_expected, titlePhoto_received);
-
     }
+
 }

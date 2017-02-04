@@ -146,7 +146,6 @@ public class CodeForcesSDK {
      * @return nextRating for all contestants
      */
     public static List<ContestantResult> getNewRatings(int contestId) {
-        RatingCalculator ratingCalculator = RatingCalculator.getRatingCalculator(contestId);
-        return ratingCalculator.getNewRatings();
+        return RatingProcessing.getNewRatings(contestId);
     }
 }

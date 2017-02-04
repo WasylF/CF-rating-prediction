@@ -1,6 +1,6 @@
 package com.wslfinc.cf.sdk;
 
-import static com.wslfinc.Constants.NEGATIVE_INFINITY;
+import static com.wslfinc.cf.sdk.Constants.NEGATIVE_INFINITY;
 import com.wslfinc.cf.sdk.entities.Member;
 import com.wslfinc.cf.sdk.entities.ProblemResult;
 import java.util.ArrayList;

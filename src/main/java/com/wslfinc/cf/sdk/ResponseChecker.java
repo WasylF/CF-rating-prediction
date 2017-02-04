@@ -1,7 +1,7 @@
 package com.wslfinc.cf.sdk;
 
 import org.json.JSONObject;
-import static com.wslfinc.Constants.*;
+import static com.wslfinc.cf.sdk.Constants.*;
 
 /**
  *
