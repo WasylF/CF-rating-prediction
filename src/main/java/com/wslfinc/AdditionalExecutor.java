@@ -1,5 +1,6 @@
 package com.wslfinc;
 
+import com.wslfinc.cf.TestMyRatingCalculation;
 import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.rating.PastRatingDownloader;
 import com.wslfinc.cf.sdk.CodeForcesSDK;
@@ -14,22 +15,21 @@ import java.util.List;
 public class AdditionalExecutor {
 
     public static void main(String[] args) throws Exception {
-        args = new String[]{"getNewRating", "744"};
-        String option = args.length == 0 ? "getNewRating" : args[0];
-        switch (option) {
+        args = new String[]{"getNewRating", "614"};
+        //args = new String[]{"testRating", "592", "764"};
+
+        switch (args[0]) {
             case "getPastRating":
                 getPastRating(args);
                 break;
             case "getNewRating":
-                for (int i = 0; i < 5; i++) {
-                    long start = System.nanoTime();
-                    getNewRating(args);
-                    long finish = System.nanoTime();
-                    System.out.println("time: " + (finish - start));
-                }
+                getNewRating(args);
+                break;
+            case "testRating":
+                testMyRating(args);
                 break;
             default:
-                System.out.println("Option \"" + option + "\" hasn't recognized");
+                System.out.println("Option \"" + args[0] + "\" hasn't recognized");
         }
     }
 
@@ -46,5 +46,11 @@ public class AdditionalExecutor {
             System.out.println(cr.getHandle() + " " + cr.getRank() + " "
                     + cr.getSeed() + " " + cr.getPrevRating() + " " + cr.getNextRating());
         }
+    }
+
+    private static void testMyRating(String[] args) {
+        int minId = Integer.valueOf(args[1]);
+        int maxId = Integer.valueOf(args[2]);
+        TestMyRatingCalculation.calculateRatingDif(minId, maxId);
     }
 }
