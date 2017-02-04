@@ -1,6 +1,6 @@
 package com.wslfinc.cf.sdk;
 
-import com.wslfinc.cf.rating.RatingCalculator;
+import com.wslfinc.cf.sdk.rating.RatingCalculator;
 import com.wslfinc.cf.sdk.api.CodeForcesAPI;
 import com.wslfinc.cf.sdk.entities.*;
 import com.wslfinc.cf.sdk.entities.additional.*;
@@ -146,8 +146,7 @@ public class CodeForcesSDK {
      * @return nextRating for all contestants
      */
     public static List<ContestantResult> getNewRatings(int contestId) {
-        List<Contestant> active = getActiveContestants(contestId);
-        RatingCalculator ratingCalculator = new RatingCalculator(active);
+        RatingCalculator ratingCalculator = RatingCalculator.getRatingCalculator(contestId);
         return ratingCalculator.getNewRatings();
     }
 }
