@@ -32,6 +32,11 @@ public class CodeForcesAPI {
                 + ": " + LocalDateTime.now());
     }
 
+    private void afterAPICall() {
+        System.out.println("API request #" + totalAPICalls + " done "
+                + ": " + LocalDateTime.now());
+    }
+
     public long getTotalAPICalls() {
         return this.totalAPICalls;
     }
@@ -43,7 +48,9 @@ public class CodeForcesAPI {
      */
     public List<RatingChange> getRatingChanges(int contestId) {
         beforeAPICall();
-        return ContestAPI.getRatingChanges(contestId);
+        List<RatingChange> result = ContestAPI.getRatingChanges(contestId);
+        afterAPICall();
+        return result;
     }
 
     /**
@@ -53,7 +60,9 @@ public class CodeForcesAPI {
      */
     public List<Contest> getContestsList(boolean gym) {
         beforeAPICall();
-        return ContestAPI.getContestsList(gym);
+        List<Contest> result = ContestAPI.getContestsList(gym);
+        afterAPICall();
+        return result;
     }
 
     /**
@@ -72,7 +81,9 @@ public class CodeForcesAPI {
     public boolean getContestStanding(int contestId, int from, int count, boolean showUnofficial,
             Contest contest, Object problems, List<RanklistRow> rows) {
         beforeAPICall();
-        return ContestAPI.getContestStanding(contestId, from, count, showUnofficial, contest, problems, rows);
+        boolean result = ContestAPI.getContestStanding(contestId, from, count, showUnofficial, contest, problems, rows);
+        afterAPICall();
+        return result;
     }
 
     /**
@@ -83,7 +94,9 @@ public class CodeForcesAPI {
      */
     public User getUserInfo(String handle) {
         beforeAPICall();
-        return UserAPI.getUserInfo(handle);
+        User result = UserAPI.getUserInfo(handle);
+        afterAPICall();
+        return result;
     }
 
     /**
@@ -94,7 +107,9 @@ public class CodeForcesAPI {
      */
     public List<User> getUserInfo(List<String> handles) {
         beforeAPICall();
-        return UserAPI.getUserInfo(handles);
+        List<User> result = UserAPI.getUserInfo(handles);
+        afterAPICall();
+        return result;
     }
 
     /**
@@ -105,7 +120,9 @@ public class CodeForcesAPI {
      */
     public List<RatingChange> getRatingHistory(String handle) {
         beforeAPICall();
-        return UserAPI.getRatingHistory(handle);
+        List<RatingChange> result = UserAPI.getRatingHistory(handle);
+        afterAPICall();
+        return result;
     }
 
 }
