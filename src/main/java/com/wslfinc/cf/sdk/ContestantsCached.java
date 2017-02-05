@@ -16,6 +16,12 @@ import org.json.JSONObject;
  */
 public class ContestantsCached extends Cacheble<Contestant> {
 
+    public ContestantsCached() {
+        // TTL 1 day
+        super(86_400_000);
+    }
+
+    
     @Override
     protected List<Contestant> getStraight(int contestId) {
         try {

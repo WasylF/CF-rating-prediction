@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  Stores data at the cache.
- * 
+ * Stores data at the cache.
+ *
  * @author Wsl_F
  * @param <CachedT> type of cached data
  */
@@ -14,6 +14,7 @@ public abstract class Cacheble<CachedT> {
 
     protected static final int MAX_CACHED_CONTESTS = 3;
 
+    final long TIME_TO_LEAVE_MS;
     /**
      * 10 minutes
      */
@@ -28,9 +29,14 @@ public abstract class Cacheble<CachedT> {
     private final Map<Integer, List<CachedT>> cache = new HashMap<>();
 
     /**
-     * Key - index, Value - {number of requests, time of last request}.
+     * Key - index, Value - {number of requests, time of last request, time of
+     * adding}.
      */
     private final Map<Integer, long[]> cacheUsing = new HashMap<>();
+
+    public Cacheble(long TTL) {
+        this.TIME_TO_LEAVE_MS = TTL;
+    }
 
     private void decreaseUsing() {
         long time = System.currentTimeMillis();
@@ -41,6 +47,12 @@ public abstract class Cacheble<CachedT> {
                 cache.remove(index);
             } else {
                 cacheUsing.get(index)[0]--;
+                if (time - cacheUsing.get(index)[2] > TIME_TO_LEAVE_MS) {
+                    // to prevent calling few times before getting new result
+                    cacheUsing.get(index)[2] = time;
+                    CalculatingStraigth calculator = new CalculatingStraigth(this, index);
+                    new Thread(calculator).start();
+                }
             }
         }
     }
@@ -79,8 +91,16 @@ public abstract class Cacheble<CachedT> {
         if (cache.size() < MAX_CACHED_CONTESTS) {
             cache.put(index, value);
             long time = System.currentTimeMillis();
-            long[] using = new long[]{INITIAL_USING, time};
+            long[] using = new long[]{INITIAL_USING, time, time};
             cacheUsing.put(index, using);
         }
+    }
+
+    void updateValueInCache(int index) {
+        List<CachedT> value = getStraight(index);
+        cache.put(index, value);
+        long time = System.currentTimeMillis();
+        long[] using = new long[]{INITIAL_USING, time, time};
+        cacheUsing.put(index, using);
     }
 }

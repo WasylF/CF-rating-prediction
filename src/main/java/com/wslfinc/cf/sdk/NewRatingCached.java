@@ -10,10 +10,21 @@ import java.util.List;
  */
 public class NewRatingCached extends Cacheble<ContestantResult> {
 
+    public NewRatingCached() {
+        // TTL 30 sec
+        super(30_000);
+    }
+
+    
     @Override
     protected List<ContestantResult> getStraight(int contestId) {
+        long before = System.currentTimeMillis();
         RatingCalculator ratingCalculator = RatingCalculator.getRatingCalculator(contestId);
-        return ratingCalculator.getNewRatings();
+        List<ContestantResult> result = ratingCalculator.getNewRatings();
+        long after = System.currentTimeMillis();
+        System.out.println("Rating for contest #" + contestId 
+                + " calculated in: " + (after-before) + " millis");
+        return result;
     }
 
 }
