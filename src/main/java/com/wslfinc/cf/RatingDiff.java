@@ -14,7 +14,7 @@ public class RatingDiff implements Comparable<RatingDiff> {
     int prevRating;
     int rank;
     double seed;
-    
+
     public RatingDiff(int contestId, String handle, int preditedRating, int realRating, int prevRating, int rank, double seed) {
         this.contestId = contestId;
         this.handle = handle;

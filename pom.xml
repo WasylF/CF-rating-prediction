@@ -4,7 +4,7 @@
 
     <groupId>com.wslfinc</groupId>
     <artifactId>CF-rating-prediction</artifactId>
-    <version>0.1</version>
+    <version>0.3.0</version>
     <packaging>war</packaging>
 
     <name>CF-rating-prediction</name>

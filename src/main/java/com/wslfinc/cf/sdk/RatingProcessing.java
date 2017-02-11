@@ -10,7 +10,7 @@ import java.util.List;
 public class RatingProcessing {
 
     private static NewRatingCached newRatings = new NewRatingCached();
-    
+
     /**
      * Calculates rating after round {@code  contestId}
      *

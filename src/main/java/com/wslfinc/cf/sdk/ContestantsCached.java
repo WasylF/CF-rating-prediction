@@ -21,7 +21,6 @@ public class ContestantsCached extends Cacheble<Contestant> {
         super(86_400_000);
     }
 
-    
     @Override
     protected List<Contestant> getStraight(int contestId) {
         try {
