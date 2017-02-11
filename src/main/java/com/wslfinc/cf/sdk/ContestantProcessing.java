@@ -4,13 +4,10 @@ import static com.wslfinc.cf.sdk.CodeForcesSDK.*;
 import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.entities.*;
 import com.wslfinc.cf.sdk.entities.additional.*;
-import com.wslfinc.helpers.web.JsonReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
