@@ -1,6 +1,5 @@
 package com.wslfinc.cf.sdk;
 
-import com.wslfinc.cf.sdk.rating.RatingCalculator;
 import com.wslfinc.cf.sdk.api.CodeForcesAPI;
 import com.wslfinc.cf.sdk.entities.*;
 import com.wslfinc.cf.sdk.entities.additional.*;
@@ -148,4 +147,17 @@ public class CodeForcesSDK {
     public static List<ContestantResult> getNewRatings(int contestId) {
         return RatingProcessing.getNewRatings(contestId);
     }
+
+    /**
+     * Getting finished contests with id lower or equals to {@code maxId}
+     *
+     * @param maxId maximal contestId
+     * @param gym true if include gym contests
+     * @return Sorted by start time list of contests with id in range
+     * [1..{@code maxId}]
+     */
+    public static List<Contest> getFinishedContests(int maxId, boolean gym) {
+        return ContestProcessing.getFinishedContests(maxId, gym);
+    }
+
 }

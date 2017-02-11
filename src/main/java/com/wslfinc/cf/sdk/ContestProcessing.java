@@ -3,8 +3,9 @@ package com.wslfinc.cf.sdk;
 import static com.wslfinc.cf.sdk.CodeForcesSDK.*;
 import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.entities.*;
-import com.wslfinc.helpers.web.JsonReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -12,38 +13,6 @@ import java.util.List;
  * @author Wsl_F
  */
 public class ContestProcessing {
-
-    private static final int DEFAULT_PREVIOUS_CONTEST = -1;
-
-    private static ArrayList<Integer> previousContest = new ArrayList<>();
-
-    private static void ensureCapacityPreviousContest(int contestId) {
-        previousContest.ensureCapacity(contestId + 1);
-        while (previousContest.size() <= contestId) {
-            previousContest.add(DEFAULT_PREVIOUS_CONTEST);
-        }
-    }
-
-    private static int getPreviousFinishedContestStraight(int contestId) {
-        int previousContestId = contestId;
-        String url;
-        do {
-            previousContestId--;
-            url = PAST_RATING_URL_PREFIX + previousContestId + PAST_RATING_URL_SUFFIX;
-        } while (!JsonReader.isExists(url));
-
-        return previousContestId;
-    }
-
-    static int getPreviousFinishedContestId(int contestId) {
-        ensureCapacityPreviousContest(contestId);
-        if (previousContest.get(contestId) == DEFAULT_PREVIOUS_CONTEST) {
-            int prev = getPreviousFinishedContestStraight(contestId);
-            previousContest.set(contestId, prev);
-        }
-
-        return previousContest.get(contestId);
-    }
 
     /**
      *
@@ -83,6 +52,30 @@ public class ContestProcessing {
     static boolean isFinished(int contestId) {
         Contest contest = getContest(contestId);
         return contest.getPhase() == ContestPhase.FINISHED;
+    }
+
+    /**
+     * Getting finished contests with id lower or equals to {@code maxId}
+     *
+     * @param maxId maximal contestId
+     * @param gym true if include gym contests
+     * @return Sorted by start time list of contests with id in range
+     * [1..{@code maxId}]
+     */
+    public static List<Contest> getFinishedContests(int maxId, boolean gym) {
+        ArrayList<Contest> contests = (ArrayList<Contest>) API.getContestsList(gym);
+        List<Contest> results = new LinkedList<>();
+        int n = contests.size();
+        for (int i = 0; i < n; i++) {
+            Contest contest = contests.get(i);
+            if (contest.isFinished() && contest.getId() <= maxId) {
+                results.add(contest);
+            }
+        }
+
+        Collections.sort(results);
+
+        return results;
     }
 
 }
