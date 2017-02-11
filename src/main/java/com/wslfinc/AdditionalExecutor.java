@@ -1,6 +1,6 @@
 package com.wslfinc;
 
-import com.wslfinc.cf.TestMyRatingCalculation;
+import com.wslfinc.cf.EvaluateMyRatingCalculation;
 import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.rating.PastRatingDownloader;
 import com.wslfinc.cf.sdk.CodeForcesSDK;
@@ -15,8 +15,8 @@ import java.util.List;
 public class AdditionalExecutor {
 
     public static void main(String[] args) throws Exception {
-        args = new String[]{"getNewRating", "614"};
-        //args = new String[]{"testRating", "592", "764"};
+        //args = new String[]{"getPastRating", "766"};
+        args = new String[]{"testRating", "766", "766"};//592
 
         switch (args[0]) {
             case "getPastRating":
@@ -35,7 +35,12 @@ public class AdditionalExecutor {
 
     public static void getPastRating(String[] args) {
         int maxId = Integer.valueOf(args[1]);
-        PastRatingDownloader.getRatingAfterContest(maxId, PATH_TO_PROJECT + "/contests");
+        boolean succes = PastRatingDownloader.getRatingBeforeContest(maxId, PATH_TO_PROJECT + "/contests");
+        if (succes) {
+            System.out.println("Rating from past contests was successfully downloaded and processed!");
+        } else {
+            System.out.println("There were some troubles with dowloading and processing past rating");
+        }
     }
 
     public static void getNewRating(String[] args) {
@@ -51,6 +56,6 @@ public class AdditionalExecutor {
     private static void testMyRating(String[] args) {
         int minId = Integer.valueOf(args[1]);
         int maxId = Integer.valueOf(args[2]);
-        TestMyRatingCalculation.calculateRatingDif(minId, maxId);
+        EvaluateMyRatingCalculation.calculateRatingDiff(minId, maxId);
     }
 }
