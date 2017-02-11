@@ -5,9 +5,7 @@ import com.wslfinc.cf.sdk.entities.additional.Contestant;
 import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -15,8 +13,8 @@ import java.util.Map;
  */
 public class RatingCalculator {
 
-    private int minDelta = 500;
-    private int maxDelta = 700;
+    private int minDelta = 1000;
+    private int maxDelta = 1000;
 
     public void setMinDelta(int minDelta) {
         this.minDelta = minDelta;
@@ -26,18 +24,14 @@ public class RatingCalculator {
         this.maxDelta = maxDelta;
     }
 
-
     int numberOfContestants;
     ArrayList<Contestant> allContestants;
-    Map<String, Double> seeds;
 
     public RatingCalculator(List<Contestant> allContestants) {
         this.allContestants = (ArrayList<Contestant>) allContestants;
         Collections.sort(this.allContestants);
         Collections.reverse(allContestants);
         this.numberOfContestants = allContestants.size();
-
-        this.seeds = null;
     }
 
     public static RatingCalculator getRatingCalculator(int contestId) {
@@ -50,12 +44,8 @@ public class RatingCalculator {
     }
 
     private double getSeed(Contestant contestant) {
-        int rating = contestant.getPrevRating();
-        return getSeed(contestant, rating);
-    }
-
-    private double getSeed(Contestant contestant, int rating) {
         double seed = 1;
+        int rating = contestant.getPrevRating();
         for (Contestant opponent : allContestants) {
             if (contestant != opponent) {
                 seed += getEloWinProbability(opponent.getPrevRating(), rating);
@@ -65,40 +55,32 @@ public class RatingCalculator {
         return seed;
     }
 
-    private void calculateSeeds() {
-        seeds = new HashMap<>();
-        for (Contestant contestant : allContestants) {
-            double seed = getSeed(contestant);
-            String handle = contestant.getHandle();
-            seeds.put(handle, seed);
-        }
-    }
-
-    public Map<String, Double> getSeeds() {
-        if (seeds == null) {
-            calculateSeeds();
+    private double getSeed(int rating) {
+        double seed = 1;
+        for (Contestant opponent : allContestants) {
+            seed += getEloWinProbability(opponent.getPrevRating(), rating);
         }
 
-        return seeds;
+        return seed;
     }
 
     private double getAverageRank(Contestant contestant) {
         double realRank = contestant.getRank();
-        double expectedRank = seeds.get(contestant.getHandle());
+        double expectedRank = getSeed(contestant);
         double average = Math.sqrt(realRank * expectedRank);
 
         return average;
     }
 
-    private int getRatingExpection(Contestant contestant) {
+    private int getRatingToRank(Contestant contestant) {
         double averageRank = getAverageRank(contestant);
 
-        int left = contestant.getPrevRating() - 2 * minDelta;
-        int right = contestant.getPrevRating() + 2 * maxDelta;
+        int left = 1;//contestant.getPrevRating() - 2 * minDelta;
+        int right = 8000;//contestant.getPrevRating() + 2 * maxDelta;
 
         while (right - left > 1) {
             int mid = (left + right) / 2;
-            double seed = getSeed(contestant, mid);
+            double seed = getSeed(mid);
             if (seed < averageRank) {
                 right = mid;
             } else {
@@ -114,7 +96,7 @@ public class RatingCalculator {
 
         for (int i = 0; i < numberOfContestants; i++) {
             Contestant contestant = allContestants.get(i);
-            int expR = getRatingExpection(contestant);
+            int expR = getRatingToRank(contestant);
             deltas.add((expR - contestant.getPrevRating()) / 2);
         }
 
@@ -126,7 +108,8 @@ public class RatingCalculator {
             }
             int inc = -sum / numberOfContestants - 1;
             for (int i = 0; i < numberOfContestants; i++) {
-                deltas.set(i, deltas.get(i) + inc);
+                int delta = deltas.get(i) + inc;
+                deltas.set(i, delta);
             }
         }
 
@@ -140,7 +123,8 @@ public class RatingCalculator {
             }
             int inc = Math.min(Math.max(-sum / zeroSumCount, -10), 0);
             for (int i = 0; i < numberOfContestants; i++) {
-                deltas.set(i, deltas.get(i) + inc);
+                int delta = deltas.get(i) + inc;
+                deltas.set(i, delta);
             }
         }
 
@@ -148,8 +132,6 @@ public class RatingCalculator {
     }
 
     public List<ContestantResult> getNewRatings() {
-        getSeeds();
-
         ArrayList<Integer> deltas = calculateDeltas();
 
         List<ContestantResult> results = new ArrayList<>(numberOfContestants);
@@ -157,7 +139,7 @@ public class RatingCalculator {
         for (int i = 0; i < numberOfContestants; i++) {
             Contestant contestant = allContestants.get(i);
             int nextRating = contestant.getPrevRating() + deltas.get(i);
-            results.add(new ContestantResult(contestant, seeds.get(contestant.getHandle()), nextRating));
+            results.add(new ContestantResult(contestant, getSeed(contestant), nextRating));
         }
 
         return results;

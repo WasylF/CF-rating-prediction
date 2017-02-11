@@ -18,8 +18,8 @@ public class NewRatingCached extends Cacheble<ContestantResult> {
     
     @Override
     protected List<ContestantResult> getStraight(int contestId) {
-        long before = System.currentTimeMillis();
         RatingCalculator ratingCalculator = RatingCalculator.getRatingCalculator(contestId);
+        long before = System.currentTimeMillis();
         List<ContestantResult> result = ratingCalculator.getNewRatings();
         long after = System.currentTimeMillis();
         System.out.println("Rating for contest #" + contestId 
