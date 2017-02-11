@@ -4,6 +4,7 @@ import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.Contest;
 import com.wslfinc.cf.sdk.entities.RatingChange;
+import com.wslfinc.helpers.web.JsonReader;
 import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,98 +20,105 @@ import org.json.JSONObject;
  */
 public class PastRatingDownloader {
 
-    private static Map<String, ArrayList<Integer>> rating;
-    private static int currentMaxContestId;
+    public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
+        List<Contest> contests = CodeForcesSDK.getFinishedContests(maxId, false);
+        Map<String, Integer> rating = new HashMap<>();
 
-    private static void addRatingChange(RatingChange ratingChange) {
-        String handle = ratingChange.getHandle();
-        int prevRating = ratingChange.getOldRating();
-        int nextRating = ratingChange.getNewRating();
+        boolean result = true;
+        int n = contests.size();
+        for (int i = 0; i < n; i++) {
+            int contestId = contests.get(i).getId();
+            if (!writeToFiles(filePrefix, rating, "" + contestId)) {
+                result = false;
+                System.err.println("Couldn't write rating after contest " + contestId);
+            }
 
-        if (!rating.containsKey(handle)) {
-            rating.put(handle, new ArrayList<Integer>(currentMaxContestId + 1));
+            List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
+            for (RatingChange ratingChange : ratingChanges) {
+                rating.put(ratingChange.getHandle(), ratingChange.getNewRating());
+            }
         }
 
-        addRating(handle, prevRating, nextRating);
+        return writeToFiles(filePrefix, rating, "current") && result;
     }
 
-    private static ArrayList<Integer> addRating(String handle, int prevRating, int nextRating) {
-        ArrayList<Integer> ratings = rating.get(handle);
-        ratings.ensureCapacity(currentMaxContestId + 1);
-        while (ratings.size() <= currentMaxContestId) {
-            ratings.add(prevRating);
+    private static JSONObject toJSON(Map<String, Integer> rating) {
+        List<JSONObject> list = new ArrayList<>(rating.size());
+
+        for (String handle : rating.keySet()) {
+            JSONObject contestant = new JSONObject();
+            contestant.put("handle", handle);
+            contestant.put("rating", rating.get(handle));
+            list.add(contestant);
         }
-        ratings.set(currentMaxContestId, nextRating);
+
+        JSONObject contest = new JSONObject();
+        contest.put("status", SUCCESSFUL_STATUS);
+        contest.put(JSON_RESULTS, new JSONArray(list));
+
+        return contest;
+    }
+
+    private static String getFileName(String contestId, String filePrefix) {
+        return filePrefix + "/contest_" + contestId + ".html";
+    }
+
+    private static boolean writeToFiles(String filePrefix, Map<String, Integer> rating, String contestId) {
+        boolean result = true;
+        String fileName = getFileName(contestId, filePrefix);
+        JSONObject json = toJSON(rating);
+
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
+            json.write(writer);
+            writer.write("\n");
+        } catch (Exception ex) {
+            System.err.println("Couldn't write past rating to the file\n"
+                    + ex.getMessage());
+            result = false;
+        }
+
+        return result;
+    }
+
+    private static Map<String, Integer> toMap(JSONObject json) {
+        if (!json.has("status") || !json.has(JSON_RESULTS)) {
+            return new HashMap<>();
+        }
+
+        Map<String, Integer> ratings = new HashMap<>();
+        JSONArray ratingsArray = json.getJSONArray(JSON_RESULTS);
+        for (Object rating : ratingsArray) {
+            JSONObject r = (JSONObject) rating;
+            ratings.put(r.getString("handle"), r.getInt("rating"));
+        }
+
         return ratings;
     }
 
-    private static void addIfNotExists(int maxContestId) {
-        currentMaxContestId = maxContestId;
-
-        for (String handle : rating.keySet()) {
-            ArrayList<Integer> r = rating.get(handle);
-            int curRating = r.get(r.size() - 1);
-            addRating(handle, curRating, curRating);
-        }
-    }
-
-    public static boolean getRatingAfterContest(int maxContestId, String filePrefix) {
-        rating = new TreeMap<>();
-        currentMaxContestId = 0;
-        ArrayList<Contest> contests = (ArrayList<Contest>) CodeForcesSDK.getContestsList(false);
-        Collections.sort(contests);
-
-        int n = contests.size();
-
-        for (int i = 0; i < n; i++) {
-            int contestId = contests.get(i).getId();
-            if (contestId > maxContestId) {
-                break;
-            }
-
-            if (CodeForcesSDK.isFinished(contestId)) {
-                currentMaxContestId = Math.max(contests.get(i).getId(), currentMaxContestId);
+    private static boolean validate(int maxId, String filePrefix) {
+        boolean result = true;
+        List<Contest> contests = CodeForcesSDK.getFinishedContests(maxId, false);
+        for (Contest contest : contests) {
+            int contestId = contest.getId();
+            String path = "file://" + getFileName("" + contestId, filePrefix);
+            try {
+                JSONObject json = JsonReader.read(path);
+                Map<String, Integer> rating = toMap(json);
                 List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
                 for (RatingChange ratingChange : ratingChanges) {
-                    addRatingChange(ratingChange);
+                    int prevRating = ratingChange.getOldRating();
+                    if (prevRating != INITIAL_RATING) {
+                        String handle = ratingChange.getHandle();
+                        if (!rating.containsKey(handle)
+                                || rating.get(handle) != prevRating) {
+                            System.err.println("Wrong rating on contest: "
+                                    + contestId + " handle: " + handle);
+                            result = false;
+                        }
+                    }
                 }
-            }
-        }
-
-        addIfNotExists(maxContestId);
-        return writeToFiles(filePrefix);
-    }
-
-    private static JSONObject getRating(int contestId, Set<String> allHandles) {
-        JSONObject document = new JSONObject();
-
-        document.put("status", SUCCESSFUL_STATUS);
-        LinkedList<JSONObject> list = new LinkedList<>();
-        for (String handle : allHandles) {
-            JSONObject user = new JSONObject();
-            user.put("handle", handle);
-            user.put("rating", rating.get(handle).get(contestId));
-            list.add(user);
-        }
-        document.put(JSON_RESULTS, new JSONArray(list));
-
-        return document;
-    }
-
-    private static boolean writeToFiles(String filePrefix) {
-        Set<String> allHandles = rating.keySet();
-        boolean result = true;
-        for (int i = 0; i <= currentMaxContestId; i++) {
-            try {
-                String fileName = filePrefix + "/contest_" + i + ".html";
-                BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName));
-                JSONObject json = getRating(i, allHandles);
-                json.write(writer);
-                writer.write("\n");
-                writer.close();
             } catch (Exception ex) {
-                System.err.println("Couldn't write past rating to the files\n"
-                        + ex.getMessage());
+                System.err.println("Couldn't read file " + path + "\n" + ex.getMessage());
                 result = false;
             }
         }

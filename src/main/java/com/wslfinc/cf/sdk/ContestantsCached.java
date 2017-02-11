@@ -25,8 +25,7 @@ public class ContestantsCached extends Cacheble<Contestant> {
     @Override
     protected List<Contestant> getStraight(int contestId) {
         try {
-            int previousContestId = ContestProcessing.getPreviousFinishedContestId(contestId);
-            String url = PAST_RATING_URL_PREFIX + previousContestId + PAST_RATING_URL_SUFFIX;
+            String url = PAST_RATING_URL_PREFIX + contestId + PAST_RATING_URL_SUFFIX;
             JSONObject response = JsonReader.read(url);
             if (ResponseChecker.isValid(response)) {
                 JSONArray contestants = response.getJSONArray(JSON_RESULTS);
