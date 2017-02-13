@@ -1,11 +1,11 @@
 {
-	"name": "Rating predictor for Codeforces",
+	"name": "CF-Predictor",
 	
 	"short_name": "CF-Predictor",
 	
-	"version": "1.0",
+	"version": "1.1",
 	
-	"description": "This extension shows approximate rating changes during and after codeforces contest.",
+	"description": "This extension predicts rating changes for Codeforces. It shows approximate deltas during and after the contest.",
 	
 	"manifest_version": 2,
 	
