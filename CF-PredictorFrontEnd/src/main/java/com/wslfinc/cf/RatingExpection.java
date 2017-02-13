@@ -40,13 +40,18 @@ public class RatingExpection {
         this.TIME_TO_LEAVE_MS = TTL;
     }
 
+    private void removeFromCache(int contestId) {
+        cacheUsing.remove(contestId);
+        cacheJSON.remove(contestId);
+        cacheString.remove(contestId);
+    }
+
     private void decreaseUsing() {
         long time = System.currentTimeMillis();
         for (Integer contestId : cacheUsing.keySet()) {
             if (cacheUsing.get(contestId)[0] <= 1
                     || time - cacheUsing.get(contestId)[1] > MAX_TIME_INTERVAL_MS) {
-                cacheUsing.remove(contestId);
-                cacheJSON.remove(contestId);
+                removeFromCache(contestId);
             } else {
                 cacheUsing.get(contestId)[0]--;
                 if (time - cacheUsing.get(contestId)[2] > TIME_TO_LEAVE_MS) {
@@ -86,7 +91,9 @@ public class RatingExpection {
             result = getChachedJSON(contestId);
         } else {
             result = getStraight(contestId);
-            addIfNeed(contestId, result);
+            if (result != null) {
+                addIfNeed(contestId, result);
+            }
         }
 
         decreaseUsing();
@@ -100,8 +107,12 @@ public class RatingExpection {
             result = getChachedString(contestId);
         } else {
             JSONObject json = getStraight(contestId);
-            result = json.toString();
-            addIfNeed(contestId, json);
+            if (json != null) {
+                result = json.toString();
+                addIfNeed(contestId, json);
+            } else {
+                result = "{\"status\" : \"FAIL\"}";
+            }
         }
 
         decreaseUsing();
@@ -110,7 +121,7 @@ public class RatingExpection {
     }
 
     private void addIfNeed(int contestId, JSONObject value) {
-        if (cacheJSON.size() < MAX_CACHED_CONTESTS) {
+        if (value != null && cacheJSON.size() < MAX_CACHED_CONTESTS) {
             cacheJSON.put(contestId, value);
             cacheString.put(contestId, value.toString());
             long time = System.currentTimeMillis();
@@ -121,6 +132,10 @@ public class RatingExpection {
 
     void updateValueInCache(int contestId) {
         JSONObject value = getStraight(contestId);
+        if (value == null) {
+            removeFromCache(contestId);
+            return;
+        }
         cacheJSON.put(contestId, value);
         cacheString.put(contestId, value.toString());
         long time = System.currentTimeMillis();
