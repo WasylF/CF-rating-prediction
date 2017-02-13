@@ -1,5 +1,6 @@
-/nbproject/
-/target/
 *.jar
 *.class
-/contests/
+*.war
+/CF-PredictorFrontEnd/target/
+/CF-PredictorBackEnd/target/
+/CF-PredictorBackEnd/contests/
