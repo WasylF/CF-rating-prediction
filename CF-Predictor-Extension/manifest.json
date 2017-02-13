@@ -1,0 +1,40 @@
+{
+	"name": "Rating predictor for Codeforces",
+	
+	"short_name": "CF-Predictor",
+	
+	"version": "1.0",
+	
+	"description": "This extension shows approximate rating changes during and after codeforces contest.",
+	
+	"manifest_version": 2,
+	
+	"icons":
+	{
+		"48": "static/icon48.png",
+		"128": "static/icon128.png"
+	},
+	
+	"permissions":
+	[
+		"tabs",
+		"activeTab",
+		"background",
+		"http://codeforces.com/",
+		"http://cf-predictor.us-west-2.elasticbeanstalk.com/",
+		"http://localhost:8084/CF-PredictorFrontEnd/"
+	],
+	
+	"content_scripts":
+	[
+		{
+			"js": ["third_party/jquery.js", "showDeltas.js"],
+			"matches": ["http://codeforces.com/contest/*/standings*"]
+		}
+	],
+	
+	"background":
+	{
+		"scripts" : ["third_party/jquery.js"]
+	}
+}
