@@ -78,4 +78,18 @@ public class ContestProcessing {
         return results;
     }
 
+    public static List<String> getContestNames(boolean gym) {
+        List<Contest> contests = getContestsList(gym);
+        List<String> result = new ArrayList<>(contests.size());
+
+        for (Contest contest : contests) {
+            int contestId = contest.getId();
+            while (result.size() <= contestId) {
+                result.add("");
+            }
+            result.set(contestId, contest.getName());
+        }
+
+        return result;
+    }
 }

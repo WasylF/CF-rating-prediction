@@ -10,7 +10,7 @@ public class Constants {
      * Full path to the project folder. It's needed for tests.
      */
     public static final String PATH_TO_PROJECT
-            = "/home/wslf/ProgramingProjects/AWS/CF-rating-prediction/";
+            = "/home/wslf/ProgramingProjects/CF-rating-prediction/CF-PredictorBackEnd";
 
     /**
      * Delay before send request to Codeforces. Value in milliseconds.

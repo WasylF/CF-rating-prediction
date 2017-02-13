@@ -5,8 +5,14 @@ import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.rating.PastRatingDownloader;
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.additional.*;
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -16,7 +22,8 @@ public class AdditionalExecutor {
 
     public static void main(String[] args) throws Exception {
         //args = new String[]{"getPastRating", "766"};
-        args = new String[]{"testRating", "766", "766"};//592
+        //args = new String[]{"testRating", "766", "766"};//592
+        args = new String[]{"matchesIdToNames", "false"};
 
         switch (args[0]) {
             case "getPastRating":
@@ -27,6 +34,9 @@ public class AdditionalExecutor {
                 break;
             case "testRating":
                 testMyRating(args);
+                break;
+            case "matchesIdToNames":
+                matchesIdToNames(args);
                 break;
             default:
                 System.out.println("Option \"" + args[0] + "\" hasn't recognized");
@@ -58,4 +68,30 @@ public class AdditionalExecutor {
         int maxId = Integer.valueOf(args[2]);
         EvaluateMyRatingCalculation.calculateRatingDiff(minId, maxId);
     }
+
+    private static void matchesIdToNames(String[] args) {
+        boolean gym = Boolean.getBoolean(args[1]);
+        List<String> contests = CodeForcesSDK.getContestNames(gym);
+        List<JSONObject> list = new ArrayList<>(contests.size());
+        for (int contestId = contests.size() - 1; contestId > 0; contestId--) {
+            JSONObject json = new JSONObject();
+            json.put("contestId", contestId);
+            json.put("name", contests.get(contestId));
+            list.add(json);
+        }
+
+        JSONObject contestNames = new JSONObject();
+        contestNames.put("status", "OK");
+        contestNames.put("result", new JSONArray(list));
+
+        String fileName = PATH_TO_PROJECT + "/contests/contestNames.json";
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
+            contestNames.write(writer);
+            writer.write("\n");
+        } catch (Exception ex) {
+            System.err.println("Couldn't write contestNames\n"
+                    + ex.getMessage());
+        }
+    }
+
 }

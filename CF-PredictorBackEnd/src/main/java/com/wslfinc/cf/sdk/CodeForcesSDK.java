@@ -25,7 +25,7 @@ public class CodeForcesSDK {
     /**
      *
      * @param gym include gym contests
-     * @return rating changes
+     * @return list of contests
      */
     public static List<Contest> getContestsList(boolean gym) {
         return API.getContestsList(gym);
@@ -160,4 +160,7 @@ public class CodeForcesSDK {
         return ContestProcessing.getFinishedContests(maxId, gym);
     }
 
+    public static List<String> getContestNames(boolean gym) {
+        return ContestProcessing.getContestNames(gym);
+    }
 }
