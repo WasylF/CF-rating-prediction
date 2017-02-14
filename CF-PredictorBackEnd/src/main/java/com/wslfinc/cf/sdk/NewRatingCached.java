@@ -11,8 +11,8 @@ import java.util.List;
 public class NewRatingCached extends Cacheble<ContestantResult> {
 
     public NewRatingCached() {
-        // TTL 30 sec
-        super(30_000);
+        // TTL 40 sec
+        super(40_000);
     }
 
     @Override

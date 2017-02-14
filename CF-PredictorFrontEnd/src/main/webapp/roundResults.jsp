@@ -8,8 +8,15 @@
 <%@page import="org.json.JSONObject"%>
 <%@page import="java.util.List"%>
 <%
-    int contestId = Integer.valueOf(request.getParameter("contestId"));
-    JSONArray newRating = RatingGetter.getNewRating(contestId).getJSONArray("result");
+    JSONArray newRating;
+    int contestId;
+    try {
+        contestId = Integer.valueOf(request.getParameter("contestId"));
+        newRating = RatingGetter.getNewRating(contestId).getJSONArray("result");
+    } catch (NumberFormatException ex) {
+        contestId = -1;
+        newRating = new JSONArray();
+    }
     System.out.println("New ratings loaded");
     final String white = "#FFFFFF";
     final String grey = "#D3D3D3";
@@ -23,9 +30,10 @@
         <title>Round results</title>
     </head>
     <body>
+        <% if (contestId != -1) {%>
         <h1> Results of contest <%=contestId%></h1>
         <h2> It's unofficial results, service works in beta</h2> 
-        
+
         <table border="5">
             <thead>
                 <tr bgcolor= "#808080">>
@@ -54,5 +62,8 @@
                 <%}%>
             </tbody>
         </table>
+        <% } else { %>
+        <h1> Wrong contestId parameter </h1>
+        <%}%>
     </body>
 </html>

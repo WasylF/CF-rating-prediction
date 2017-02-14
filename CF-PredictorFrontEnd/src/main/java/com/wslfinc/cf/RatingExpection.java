@@ -1,6 +1,8 @@
 package com.wslfinc.cf;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONObject;
 
@@ -11,11 +13,11 @@ import org.json.JSONObject;
  */
 public class RatingExpection {
 
-    protected static final int MAX_CACHED_CONTESTS = 10;
+    protected static final int MAX_CACHED_CONTESTS = 5;
 
-    long TIME_TO_LEAVE_MS;
+    long TIME_TO_RECALCULATE_MS;
     long MAX_TIME_INTERVAL_MS = 60_000;
-    int INITIAL_USING = 50;
+    int INITIAL_USING = MAX_CACHED_CONTESTS * 2 + 1;
 
     private String backEndUrl = "http://cfpredictorbackend.us-west-2.elasticbeanstalk.com";
 
@@ -36,11 +38,11 @@ public class RatingExpection {
      */
     private final Map<Integer, long[]> cacheUsing = new HashMap<>();
 
-    public RatingExpection(long TTL) {
-        this.TIME_TO_LEAVE_MS = TTL;
+    public RatingExpection(long recalculateTimeMS) {
+        this.TIME_TO_RECALCULATE_MS = recalculateTimeMS;
     }
 
-    private void removeFromCache(int contestId) {
+    public void removeFromCache(int contestId) {
         cacheUsing.remove(contestId);
         cacheJSON.remove(contestId);
         cacheString.remove(contestId);
@@ -54,7 +56,7 @@ public class RatingExpection {
                 removeFromCache(contestId);
             } else {
                 cacheUsing.get(contestId)[0]--;
-                if (time - cacheUsing.get(contestId)[2] > TIME_TO_LEAVE_MS) {
+                if (time - cacheUsing.get(contestId)[2] > TIME_TO_RECALCULATE_MS) {
                     // to prevent calling few times before getting new result
                     cacheUsing.get(contestId)[2] = time;
                     CalculatingStraigth calculator = new CalculatingStraigth(this, contestId);
@@ -66,14 +68,14 @@ public class RatingExpection {
 
     private JSONObject getChachedJSON(int contestId) {
         long time = System.currentTimeMillis();
-        cacheUsing.get(contestId)[0]++;
+        cacheUsing.get(contestId)[0]+= 2;
         cacheUsing.get(contestId)[1] = time;
         return cacheJSON.get(contestId);
     }
 
     private String getChachedString(int contestId) {
         long time = System.currentTimeMillis();
-        cacheUsing.get(contestId)[0]++;
+        cacheUsing.get(contestId)[0]+= 2;
         cacheUsing.get(contestId)[1] = time;
         return cacheString.get(contestId);
     }
@@ -139,7 +141,16 @@ public class RatingExpection {
         cacheJSON.put(contestId, value);
         cacheString.put(contestId, value.toString());
         long time = System.currentTimeMillis();
-        long[] using = new long[]{INITIAL_USING, time, time};
+        long lastTimeUsing;
+        long reqNumber;
+        if (cacheUsing.containsKey(contestId)) {
+            lastTimeUsing = cacheUsing.get(contestId)[1];
+            reqNumber = cacheUsing.get(contestId)[0];
+        } else {
+            lastTimeUsing = time - MAX_TIME_INTERVAL_MS / 2;
+            reqNumber = 2;
+        }
+        long[] using = new long[]{reqNumber, lastTimeUsing, time};
         cacheUsing.put(contestId, using);
     }
 
@@ -154,5 +165,9 @@ public class RatingExpection {
         }
 
         return null;
+    }
+
+    public List<Integer> getCachedIds() {
+        return new ArrayList<>(cacheJSON.keySet());
     }
 }

@@ -49,6 +49,8 @@ public class RatingCalculator {
         for (Contestant opponent : allContestants) {
             if (contestant != opponent) {
                 seed += getEloWinProbability(opponent.getPrevRating(), rating);
+            } else {
+                System.out.println(opponent.getHandle());
             }
         }
 

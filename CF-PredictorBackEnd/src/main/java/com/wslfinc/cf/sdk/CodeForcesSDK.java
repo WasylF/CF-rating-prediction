@@ -10,7 +10,7 @@ import java.util.List;
  * @author Wsl_F
  */
 public class CodeForcesSDK {
-
+    
     final static CodeForcesAPI API = CodeForcesAPI.getInstance();
 
     /**
@@ -159,8 +159,16 @@ public class CodeForcesSDK {
     public static List<Contest> getFinishedContests(int maxId, boolean gym) {
         return ContestProcessing.getFinishedContests(maxId, gym);
     }
-
+    
     public static List<String> getContestNames(boolean gym) {
         return ContestProcessing.getContestNames(gym);
+    }
+    
+    public static List<Integer> getCachedIds() {
+        return RatingProcessing.getCachedIds();
+    }
+    
+    public static void removeFromCache(int contestId) {
+        RatingProcessing.removeFromCache(contestId);
     }
 }

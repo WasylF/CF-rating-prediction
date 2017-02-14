@@ -4,9 +4,25 @@
         <servlet-name>GetNextRatingServlet</servlet-name>
         <servlet-class>com.wslfinc.servlets.GetNextRatingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetCachedIdsServlet</servlet-name>
+        <servlet-class>com.wslfinc.servlets.GetCachedIdsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveFromCacheServlet</servlet-name>
+        <servlet-class>com.wslfinc.servlets.RemoveFromCacheServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetNextRatingServlet</servlet-name>
         <url-pattern>/GetNextRatingServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCachedIdsServlet</servlet-name>
+        <url-pattern>/GetCachedIdsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveFromCacheServlet</servlet-name>
+        <url-pattern>/RemoveFromCacheServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

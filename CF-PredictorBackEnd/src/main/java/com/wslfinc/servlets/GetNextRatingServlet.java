@@ -19,11 +19,15 @@ public class GetNextRatingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("Request received!");
         System.out.println("Parameter: " + request.getParameter("contestId"));
-        int contestId = Integer.valueOf(request.getParameter("contestId"));
-
-        List<ContestantResult> nextRating = CodeForcesSDK.getNewRatings(contestId);
-        JSONObject json = ContestantResult.toJSON(nextRating);
-        request.setAttribute("nextRating", json);
+        JSONObject json;
+        try {
+            int contestId = Integer.valueOf(request.getParameter("contestId"));
+            List<ContestantResult> nextRating = CodeForcesSDK.getNewRatings(contestId);
+            json = ContestantResult.toJSON(nextRating);
+        } catch (NumberFormatException ex) {
+            json = new JSONObject();
+            json.put("status", "FAIL");
+        }
 
         try {
             PrintWriter out = response.getWriter();

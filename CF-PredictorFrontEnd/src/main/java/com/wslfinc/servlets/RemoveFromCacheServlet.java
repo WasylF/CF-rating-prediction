@@ -10,23 +10,22 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Wsl_F
  */
-public class GetNextRatingServlet extends HttpServlet {
+public class RemoveFromCacheServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("Request received!");
-        System.out.println("Parameter: " + request.getParameter("contestId"));
-        String json;
+        String result;
         try {
             int contestId = Integer.valueOf(request.getParameter("contestId"));
-            json = RatingGetter.getNewRatingString(contestId);
-        } catch (NumberFormatException ex) {
-            json = "{ \"status\": \"FAIL\" }";
+            RatingGetter.removeFromCache(contestId);
+            result = "done";
+        } catch (Exception ex) {
+            result = "exception caused";
         }
 
         try {
             PrintWriter out = response.getWriter();
-            out.write(json);
+            out.write(result);
             out.flush();
             response.setStatus(200);
         } catch (Exception ex) {

@@ -8,7 +8,7 @@ import java.util.List;
  * @author Wsl_F
  */
 public class RatingProcessing {
-
+    
     private static NewRatingCached newRatings = new NewRatingCached();
 
     /**
@@ -19,5 +19,13 @@ public class RatingProcessing {
      */
     public static List<ContestantResult> getNewRatings(int contestId) {
         return newRatings.getValue(contestId);
+    }
+    
+    public static List<Integer> getCachedIds() {
+        return newRatings.getCachedIds();
+    }
+    
+    public static void removeFromCache(int contestId) {
+        newRatings.removeFromCahce(contestId);
     }
 }
