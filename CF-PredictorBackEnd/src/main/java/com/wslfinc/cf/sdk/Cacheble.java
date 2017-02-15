@@ -2,6 +2,7 @@ package com.wslfinc.cf.sdk;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,13 +28,13 @@ public abstract class Cacheble<CachedT> {
      * Key - index, Value - cached value. Map contains not more than
      * {@code MAX_CACHED_CONTESTS} items
      */
-    private final Map<Integer, List<CachedT>> cache = new HashMap<>();
+    private volatile Map<Integer, List<CachedT>> cache = new HashMap<>();
 
     /**
      * Key - index, Value - {number of requests, time of last request, time of
      * adding}.
      */
-    private final Map<Integer, long[]> cacheUsing = new HashMap<>();
+    private volatile Map<Integer, long[]> cacheUsing = new HashMap<>();
     
     public Cacheble(long recalculateTimeMS) {
         this.TIME_TO_RECALCULATE_MS = recalculateTimeMS;
@@ -44,12 +45,19 @@ public abstract class Cacheble<CachedT> {
         cache.remove(index);
     }
     
+    public void removeFromCache(List<Integer> forRemove) {
+        for (int index : forRemove)  {
+            removeFromCahce(index);
+        }
+    }
+    
     private void decreaseUsing() {
         long time = System.currentTimeMillis();
+        List<Integer> forRemove = new LinkedList<>();
         for (Integer index : cacheUsing.keySet()) {
             if (cacheUsing.get(index)[0] <= 1
                     || time - cacheUsing.get(index)[1] > MAX_TIME_INTERVAL_MS) {
-                removeFromCahce(index);
+                forRemove.add(index);
             } else {
                 cacheUsing.get(index)[0]--;
                 if (time - cacheUsing.get(index)[2] > TIME_TO_RECALCULATE_MS) {
@@ -60,6 +68,8 @@ public abstract class Cacheble<CachedT> {
                 }
             }
         }
+        
+        removeFromCache(forRemove);
     }
     
     private List<CachedT> getChached(int index) {

@@ -2,6 +2,7 @@ package com.wslfinc.cf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONObject;
@@ -25,18 +26,18 @@ public class RatingExpection {
      * Key - contestId, Value - cached JSON value. Map contains not more than
      * {@code MAX_CACHED_CONTESTS} items
      */
-    private final Map<Integer, JSONObject> cacheJSON = new HashMap<>();
+    private volatile Map<Integer, JSONObject> cacheJSON = new HashMap<>();
     /**
      * Key - contestId, Value - cached String value - representation of JSON.
      * Map contains not more than {@code MAX_CACHED_CONTESTS} items
      */
-    private final Map<Integer, String> cacheString = new HashMap<>();
+    private volatile Map<Integer, String> cacheString = new HashMap<>();
 
     /**
      * Key - contestId, Value - {number of requests, time of last request, time
      * of adding}.
      */
-    private final Map<Integer, long[]> cacheUsing = new HashMap<>();
+    private volatile Map<Integer, long[]> cacheUsing = new HashMap<>();
 
     public RatingExpection(long recalculateTimeMS) {
         this.TIME_TO_RECALCULATE_MS = recalculateTimeMS;
@@ -48,12 +49,19 @@ public class RatingExpection {
         cacheString.remove(contestId);
     }
 
+    public void removeFromCache(List<Integer> forRemove) {
+        for (int contestId : forRemove) {
+            removeFromCache(contestId);
+        }
+    }
+
     private void decreaseUsing() {
         long time = System.currentTimeMillis();
+        List<Integer> forRemove = new LinkedList<>();
         for (Integer contestId : cacheUsing.keySet()) {
             if (cacheUsing.get(contestId)[0] <= 1
                     || time - cacheUsing.get(contestId)[1] > MAX_TIME_INTERVAL_MS) {
-                removeFromCache(contestId);
+                forRemove.add(contestId);
             } else {
                 cacheUsing.get(contestId)[0]--;
                 if (time - cacheUsing.get(contestId)[2] > TIME_TO_RECALCULATE_MS) {
@@ -64,18 +72,20 @@ public class RatingExpection {
                 }
             }
         }
+
+        removeFromCache(forRemove);
     }
 
     private JSONObject getChachedJSON(int contestId) {
         long time = System.currentTimeMillis();
-        cacheUsing.get(contestId)[0]+= 2;
+        cacheUsing.get(contestId)[0] += 2;
         cacheUsing.get(contestId)[1] = time;
         return cacheJSON.get(contestId);
     }
 
     private String getChachedString(int contestId) {
         long time = System.currentTimeMillis();
-        cacheUsing.get(contestId)[0]+= 2;
+        cacheUsing.get(contestId)[0] += 2;
         cacheUsing.get(contestId)[1] = time;
         return cacheString.get(contestId);
     }
