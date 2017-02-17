@@ -6,11 +6,13 @@ function modifyPartyHtml(index, elem) {
 
 	if (partyNum > 0) {
 		var handle = $(elem).find("td:eq(1)").find("a").first().html();
-		//next 2 lines - fix for legendary grandmaster
-		handle = handle.replace('<span class="legendary-user-first-letter">','');
-		handle = handle.replace('</span>','');
-		if (handle in deltas) {
-			delta = Math.round(deltas[handle]);
+		if (handle) {
+			//next 2 lines - fix for legendary grandmaster
+			handle = handle.replace('<span class="legendary-user-first-letter">','');
+			handle = handle.replace('</span>','');
+			if (handle in deltas) {
+				delta = Math.round(deltas[handle]);
+			}
 		}
 	}
 
@@ -50,17 +52,38 @@ function showDeltas() {
 	}
 }
 
-function getDeltas(contestId, callback) {
-	//var myServer = "http://localhost:8084/CF-PredictorFrontEnd/GetNextRatingServlet?contestId="
-	var myServer = "http://cf-predictor.us-west-2.elasticbeanstalk.com/GetNextRatingServlet?contestId=";
-	$.getJSON(myServer + contestId, function(data) {
-		for (var i = 0; i < data.result.length; i++) {
-			var handle = data.result[i].handle;
-			var delta = data.result[i].newRating - data.result[i].oldRating;
-			deltas[handle] = delta;
+function urlExists(url, callback){
+	$.ajax({
+		type: 'HEAD',
+		url: url,
+		success: function(){
+			callback(true);
+		},
+		error: function() {
+			callback(false);
 		}
-		callback();
 	});
 }
+
+
+function getDeltas(contestId, callback) {
+	//var localServer = "http://localhost:8084/CF-PredictorFrontEnd/"
+	var amazonServer = "http://cf-predictor.us-west-2.elasticbeanstalk.com/";
+	var herokuServer = "https://cf-predictor-frontend.herokuapp.com/";
+	var page = 	"GetNextRatingServlet?contestId=" + contestId;
+
+	urlExists(amazonServer, function(exists) {
+		var server = (exists ? amazonServer : herokuServer) + page;
+		$.getJSON(server, function(data) {
+			for (var i = 0; i < data.result.length; i++) {
+				var handle = data.result[i].handle;
+				var delta = data.result[i].newRating - data.result[i].oldRating;
+				deltas[handle] = delta;
+			}
+			callback();
+		});
+	});
+}
+
 
 showDeltas();
