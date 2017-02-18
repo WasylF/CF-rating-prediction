@@ -21,13 +21,38 @@ import org.json.JSONObject;
 public class PastRatingDownloader {
 
     public static boolean getRatingBeforeContest(int maxId, String filePrefix) {
+        boolean result = getRatingBeforeContest(-1, maxId, filePrefix);
+        return validate(maxId, filePrefix) && result;
+    }
+
+    public static Map<String, Integer> loadRatingFromId(int loadContestId, String filePrefix) {
+        if (loadContestId > 0) {
+            try {
+                String path = "file://" + getFileName("" + loadContestId, filePrefix);
+                JSONObject json = JsonReader.read(path);
+                return toMap(json);
+            } catch (Exception ex) {
+                System.err.println(ex.toString());
+            }
+        }
+
+        return new HashMap<>();
+    }
+
+    public static boolean getRatingBeforeContest(int loadFromId, int maxId, String filePrefix) {
         List<Contest> contests = CodeForcesSDK.getFinishedContests(maxId, false);
-        Map<String, Integer> rating = new HashMap<>();
+        Map<String, Integer> rating = loadRatingFromId(loadFromId, filePrefix);
+        boolean loaded = false;
 
         boolean result = true;
         int n = contests.size();
         for (int i = 0; i < n; i++) {
             int contestId = contests.get(i).getId();
+            loaded |= contestId == loadFromId;
+            if (!loaded) {
+                continue;
+            }
+            System.out.println("Writing rating before contest: " + contestId);
             if (!writeToFiles(filePrefix, rating, "" + contestId)) {
                 result = false;
                 System.err.println("Couldn't write rating after contest " + contestId);
@@ -39,7 +64,8 @@ public class PastRatingDownloader {
             }
         }
 
-        return writeToFiles(filePrefix, rating, "current") && result;
+        result &= writeToFiles(filePrefix, rating, "current");
+        return result;
     }
 
     private static JSONObject toJSON(Map<String, Integer> rating) {

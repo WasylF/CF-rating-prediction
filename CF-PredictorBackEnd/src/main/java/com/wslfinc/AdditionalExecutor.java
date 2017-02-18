@@ -21,9 +21,10 @@ import org.json.JSONObject;
 public class AdditionalExecutor {
 
     public static void main(String[] args) throws Exception {
-        //args = new String[]{"getPastRating", "766"};
-        //args = new String[]{"testRating", "766", "766"};//592
-        args = new String[]{"matchesIdToNames", "false"};
+        //args = new String[]{"getPastRating", "767"};
+        args = new String[]{"getPastRating", "767", "761"};
+        //args = new String[]{"testRating", "750", "767"};//592
+        //args = new String[]{"matchesIdToNames", "false"};
 
         switch (args[0]) {
             case "getPastRating":
@@ -45,7 +46,9 @@ public class AdditionalExecutor {
 
     public static void getPastRating(String[] args) {
         int maxId = Integer.valueOf(args[1]);
-        boolean succes = PastRatingDownloader.getRatingBeforeContest(maxId, PATH_TO_PROJECT + "/contests");
+        int loadFromId = args.length == 3 ? Integer.valueOf(args[2]) : -1;
+        boolean succes = 
+                PastRatingDownloader.getRatingBeforeContest(loadFromId, maxId, PATH_TO_PROJECT + "/contests");
         if (succes) {
             System.out.println("Rating from past contests was successfully downloaded and processed!");
         } else {
