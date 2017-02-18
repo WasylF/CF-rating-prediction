@@ -172,4 +172,8 @@ public class CodeForcesSDK {
     public static void removeFromCache(int contestId) {
         RatingProcessing.removeFromCache(contestId);
     }
+
+    public static void changeTimeToUodate(long timeToUpdateMS) {
+        RatingProcessing.changeTimeToUpdate(timeToUpdateMS);
+    }
 }

@@ -11,9 +11,8 @@ import com.github.wslf.datastructures.cache.Cacheable;
  */
 public class NewRatingCached extends Cacheable<List<ContestantResult>, Integer> {
 
-    public NewRatingCached() {
-        // TTL 40 sec
-        super(10, 2, 40_000);
+    public NewRatingCached(long timeToUpdate) {
+        super(10, 2, timeToUpdate);
     }
 
     @Override

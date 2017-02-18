@@ -9,8 +9,8 @@ import java.util.Set;
  * @author Wsl_F
  */
 public class RatingProcessing {
-    
-    private static NewRatingCached newRatings = new NewRatingCached();
+
+    private static NewRatingCached newRatings = new NewRatingCached(77_000);
 
     /**
      * Calculates rating after round {@code  contestId}
@@ -21,12 +21,16 @@ public class RatingProcessing {
     public static List<ContestantResult> getNewRatings(int contestId) {
         return newRatings.getValue(contestId);
     }
-    
+
     public static Set<Integer> getCachedIds() {
         return newRatings.getCachedKeys();
     }
-    
+
     public static void removeFromCache(int contestId) {
         newRatings.remove(contestId);
+    }
+
+    public static void changeTimeToUpdate(long timeToUpdate) {
+        newRatings = new NewRatingCached(timeToUpdate);
     }
 }

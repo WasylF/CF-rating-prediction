@@ -12,6 +12,10 @@
         <servlet-name>RemoveFromCacheServlet</servlet-name>
         <servlet-class>com.wslfinc.servlets.RemoveFromCacheServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeTimeToUpdateServlet</servlet-name>
+        <servlet-class>com.wslfinc.servlets.ChangeTimeToUpdateServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>GetNextRatingServlet</servlet-name>
         <url-pattern>/GetNextRatingServlet</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>RemoveFromCacheServlet</servlet-name>
         <url-pattern>/RemoveFromCacheServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeTimeToUpdateServlet</servlet-name>
+        <url-pattern>/ChangeTimeToUpdateServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
