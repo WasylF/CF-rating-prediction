@@ -1,6 +1,7 @@
 package com.wslfinc.cf;
 
 import java.util.List;
+import java.util.ArrayList;
 import org.json.JSONObject;
 
 /**
@@ -8,22 +9,22 @@ import org.json.JSONObject;
  * @author Wsl_F
  */
 public class RatingGetter {
-    
-    private static final RatingExpection cache = new RatingExpection(60_000);
-    
+
+    private static final RatingChanges cache = new RatingChanges();
+
     public static JSONObject getNewRating(int contestId) {
-        return cache.getJSONValue(contestId);
+        return cache.getValue(contestId);
     }
-    
+
     public static String getNewRatingString(int contestId) {
-        return cache.getStringValue(contestId);
+        return getNewRating(contestId).toString();
     }
-    
+
     public static List<Integer> getCachedIds() {
-        return cache.getCachedIds();
+        return new ArrayList<>(cache.getCachedKeys());
     }
-    
+
     public static void removeFromCache(int contestId) {
-        cache.removeFromCache(contestId);
+        cache.remove(contestId);
     }
 }

@@ -9,22 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.github.wslf.datastructures.cache.Cacheable;
 
 /**
  *
  * @author Wsl_F
  */
-public class ContestantsCached extends Cacheble<Contestant> {
+public class ContestantsCached extends Cacheable<List<Contestant>, Integer> {
 
     public ContestantsCached() {
         // TTL 1 day
-        super(86_400_000);
+        super(10, 2, 24 * 60 * 60 * 1000);
     }
 
     @Override
-    protected List<Contestant> getStraight(int contestId) {
+    public List<Contestant> getValueManually(Integer key) {
         try {
-            String url = PAST_RATING_URL_PREFIX + contestId + PAST_RATING_URL_SUFFIX;
+            String url = PAST_RATING_URL_PREFIX + key + PAST_RATING_URL_SUFFIX;
             JSONObject response = JsonReader.read(url);
             if (ResponseChecker.isValid(response)) {
                 JSONArray contestants = response.getJSONArray(JSON_RESULTS);
@@ -36,7 +37,7 @@ public class ContestantsCached extends Cacheble<Contestant> {
                 return result;
             }
         } catch (Exception exception) {
-            System.err.println("Failed to get all contestants on contestId: " + contestId);
+            System.err.println("Failed to get all contestants on contestId: " + key);
             System.err.println(exception.getMessage());
         }
 

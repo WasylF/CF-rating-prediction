@@ -2,6 +2,7 @@ package com.wslfinc.cf.sdk;
 
 import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -21,11 +22,11 @@ public class RatingProcessing {
         return newRatings.getValue(contestId);
     }
     
-    public static List<Integer> getCachedIds() {
-        return newRatings.getCachedIds();
+    public static Set<Integer> getCachedIds() {
+        return newRatings.getCachedKeys();
     }
     
     public static void removeFromCache(int contestId) {
-        newRatings.removeFromCahce(contestId);
+        newRatings.remove(contestId);
     }
 }

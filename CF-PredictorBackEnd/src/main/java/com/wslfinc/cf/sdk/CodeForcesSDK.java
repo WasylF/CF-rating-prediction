@@ -3,6 +3,7 @@ package com.wslfinc.cf.sdk;
 import com.wslfinc.cf.sdk.api.CodeForcesAPI;
 import com.wslfinc.cf.sdk.entities.*;
 import com.wslfinc.cf.sdk.entities.additional.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Wsl_F
  */
 public class CodeForcesSDK {
-    
+
     final static CodeForcesAPI API = CodeForcesAPI.getInstance();
 
     /**
@@ -159,15 +160,15 @@ public class CodeForcesSDK {
     public static List<Contest> getFinishedContests(int maxId, boolean gym) {
         return ContestProcessing.getFinishedContests(maxId, gym);
     }
-    
+
     public static List<String> getContestNames(boolean gym) {
         return ContestProcessing.getContestNames(gym);
     }
-    
+
     public static List<Integer> getCachedIds() {
-        return RatingProcessing.getCachedIds();
+        return new ArrayList<>(RatingProcessing.getCachedIds());
     }
-    
+
     public static void removeFromCache(int contestId) {
         RatingProcessing.removeFromCache(contestId);
     }
