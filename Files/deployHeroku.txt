@@ -1,1 +1,4 @@
  heroku war:deploy <path_to_war_file> --app <app_name>
+
+ heroku war:deploy CF-PredictorBackEnd-Heroku.war --app cf-predictor-backend
+ heroku war:deploy CF-PredictorFrontEnd-Heroku.war --app cf-predictor-frontend
