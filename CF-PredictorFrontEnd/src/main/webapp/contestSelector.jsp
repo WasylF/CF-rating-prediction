@@ -5,8 +5,8 @@
 --%>
 
 <%@page import="org.json.JSONArray"%>
-<%@page import="com.wslfinc.cf.JsonReader"%>
 <%@page import="org.json.JSONObject"%>
+<%@page import="com.wslfinc.cf.ContestProcessor"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,10 +17,7 @@
     <body>
         <h1>Select contest name to view rating prediction</h1>
         <%
-            String url = "https://codeforcescontests.github.io/RatingAfterRounds/contests/contestNames.html";
-            JSONObject contestNames = JsonReader.read(url);
-            JSONArray contests = contestNames.getJSONArray("result");
-            int number = contests.length();
+            JSONArray contests = ContestProcessor.getNamesIds();
         %>
 
         <form name="contestSelection"action="${pageContext.request.contextPath}/roundResults.jsp" method="POST">

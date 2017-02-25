@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class RatingChanges extends Cacheable<JSONObject, Integer> {
 
     public RatingChanges() {
-        super(10, 2, 60_000);
+        super(10, 2, 15_000);
     }
 
     @Override
