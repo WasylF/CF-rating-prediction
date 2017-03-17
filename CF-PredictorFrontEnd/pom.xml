@@ -4,7 +4,7 @@
 
     <groupId>com.wslfinc</groupId>
     <artifactId>CF-PredictorFrontEnd</artifactId>
-    <version>0.7.2</version>
+    <version>0.7.405</version>
     <packaging>war</packaging>
 
     <name>CF-PredictorFrontEnd</name>
