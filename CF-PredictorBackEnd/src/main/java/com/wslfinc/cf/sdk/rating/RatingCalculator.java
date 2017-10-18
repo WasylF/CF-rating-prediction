@@ -6,6 +6,7 @@ import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Comparator;
 
 /**
  *
@@ -13,8 +14,8 @@ import java.util.List;
  */
 public class RatingCalculator {
 
-    private int minDelta = 1000;
-    private int maxDelta = 1000;
+    private int minDelta = 300;
+    private int maxDelta = 700;
 
     public void setMinDelta(int minDelta) {
         this.minDelta = minDelta;
@@ -29,14 +30,44 @@ public class RatingCalculator {
 
     public RatingCalculator(List<Contestant> allContestants) {
         this.allContestants = (ArrayList<Contestant>) allContestants;
+        this.numberOfContestants = allContestants.size();
+        recalculateRanks();
         Collections.sort(this.allContestants);
         Collections.reverse(allContestants);
-        this.numberOfContestants = allContestants.size();
     }
 
     public static RatingCalculator getRatingCalculator(int contestId) {
         List<Contestant> active = getActiveContestants(contestId);
         return new RatingCalculator(active);
+    }
+
+    private void recalculateRanks() {
+        Comparator<Contestant> rankComp = new Comparator<Contestant>() {
+            @Override
+            public int compare(Contestant contestant1, Contestant contestan2) {
+                return Integer.compare(contestant1.getRank(), contestan2.getRank());
+            }
+        };
+
+        Collections.sort(allContestants, rankComp);
+
+        {
+            int i = 0;
+            while (i < numberOfContestants) {
+                int first = i;
+                int last = first;
+                int rank = allContestants.get(first).getRank();
+                while (last < numberOfContestants
+                        && allContestants.get(last).getRank() == rank) {
+                    last++;
+                }
+                rank = last;
+                for (int j = first; j < last; j++) {
+                    allContestants.get(j).setRank(rank);
+                }
+                i = last;
+            }
+        }
     }
 
     private static double getEloWinProbability(double ra, double rb) {
@@ -49,18 +80,18 @@ public class RatingCalculator {
         for (Contestant opponent : allContestants) {
             if (contestant != opponent) {
                 seed += getEloWinProbability(opponent.getPrevRating(), rating);
-            } else {
-                System.out.println(opponent.getHandle());
-            }
+            } 
         }
 
         return seed;
     }
 
-    private double getSeed(int rating) {
+    private double getSeed(int rating, Contestant contestant) {
         double seed = 1;
         for (Contestant opponent : allContestants) {
-            seed += getEloWinProbability(opponent.getPrevRating(), rating);
+            if (opponent != contestant) {
+                seed += getEloWinProbability(opponent.getPrevRating(), rating);
+            }
         }
 
         return seed;
@@ -77,12 +108,12 @@ public class RatingCalculator {
     private int getRatingToRank(Contestant contestant) {
         double averageRank = getAverageRank(contestant);
 
-        int left = 1;//contestant.getPrevRating() - 2 * minDelta;
-        int right = 8000;//contestant.getPrevRating() + 2 * maxDelta;
+        int left = contestant.getPrevRating() - 2 * minDelta;
+        int right = contestant.getPrevRating() + 2 * maxDelta;
 
         while (right - left > 1) {
             int mid = (left + right) / 2;
-            double seed = getSeed(mid);
+            double seed = getSeed(mid, contestant);
             if (seed < averageRank) {
                 right = mid;
             } else {
@@ -115,7 +146,7 @@ public class RatingCalculator {
             }
         }
 
-        // Sum of top-4*sqrt should be adjusted to zero.
+        // Sum of top-4*sqrt should be adjusted to zero.       
         {
             int sum = 0;
             int zeroSumCount = Math.min((int) (4 * Math.round(Math.sqrt(numberOfContestants))), numberOfContestants);
@@ -134,6 +165,10 @@ public class RatingCalculator {
     }
 
     public List<ContestantResult> getNewRatings() {
+        if (numberOfContestants < 2) {
+            return new ArrayList<>();
+        }
+        
         ArrayList<Integer> deltas = calculateDeltas();
 
         List<ContestantResult> results = new ArrayList<>(numberOfContestants);

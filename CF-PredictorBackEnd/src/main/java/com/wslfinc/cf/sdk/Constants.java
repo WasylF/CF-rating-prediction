@@ -10,7 +10,8 @@ public class Constants {
      * Full path to the project folder. It's needed for tests.
      */
     public static final String PATH_TO_PROJECT
-            = "/home/wslf/ProgramingProjects/CF-rating-prediction/CF-PredictorBackEnd/";
+            = "/home/wsl_f/Projects/CF-PredictorBackEnd/";
+    //         /home/wsl_f/Projects/CF-PredictorBackEnd/contests
 
     /**
      * Delay before send request to Codeforces. Value in milliseconds.
@@ -26,6 +27,8 @@ public class Constants {
      * JSON tag of codeforces API query results
      */
     public static final String JSON_RESULTS = "result";
+    
+    public static final String JSON_STATUS = "status";
 
     public static final String API_PREFIX = "http://codeforces.com/api";
 

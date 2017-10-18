@@ -8,24 +8,25 @@ import org.json.JSONObject;
  *
  * @author Wsl_F
  */
-public class RatingChanges extends Cacheable<JSONObject, Integer> {
+public class RatingChanges extends Cacheable<String, Integer> {
 
     public RatingChanges() {
-        super(10, 2, 15_000);
+        super(10, 3, 15_000);
     }
 
     @Override
-    public JSONObject getValueManually(Integer contestId) {
+    public synchronized String getValueManually(Integer contestId) {
+        System.out.println("Updating rating prediction for contest " + contestId + " time " + System.currentTimeMillis());
         String requestURL = BACK_END_URL + "/GetNextRatingServlet?contestId=" + contestId;
         try {
             JSONObject json = JsonReader.read(requestURL);
-            return json;
+            return json.toString();
         } catch (Exception ex) {
             System.err.println("Couldn't get request results " + requestURL
                     + "\n" + ex.getMessage());
         }
 
-        return JSON_FAIL;
+        return JSON_FAIL_STRING;
     }
 
 }

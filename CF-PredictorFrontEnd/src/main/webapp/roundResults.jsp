@@ -15,7 +15,7 @@
     int contestId;
     try {
         contestId = Integer.valueOf(request.getParameter("contestId"));
-        newRating = RatingGetter.getNewRating(contestId).getJSONArray("result");
+        newRating = RatingGetter.getNewRatingJSON(contestId).getJSONArray("result");
     } catch (NumberFormatException ex) {
         contestId = -1;
         newRating = new JSONArray();
@@ -23,7 +23,7 @@
         contestId = -2;
         newRating = new JSONArray();
     }
-    System.out.println("New ratings loaded");
+    //System.out.println("New ratings loaded");
     final String white = "#FFFFFF";
     final String[] greys = new String[]{"#D3D3D3", "#837E7C"};
     final String[] greens = new String[]{"#6CBB3C", "#59E817", "#00FF00"};

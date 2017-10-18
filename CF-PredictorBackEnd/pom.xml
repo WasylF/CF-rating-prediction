@@ -4,7 +4,7 @@
 
     <groupId>com.wslfinc</groupId>
     <artifactId>CF-PredictorBackEnd</artifactId>
-    <version>0.6.3</version>
+    <version>0.8.3</version>
     <packaging>war</packaging>
 
     <name>CF-PredictorBackEnd</name>
@@ -16,12 +16,6 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160810</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -29,14 +23,25 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20170516</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.wslf</groupId>
             <artifactId>DataStructures</artifactId>
-            <version>0.1</version>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wslf</groupId>
+            <artifactId>Utils</artifactId>
+            <version>1.1.2</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
+            <version>8.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

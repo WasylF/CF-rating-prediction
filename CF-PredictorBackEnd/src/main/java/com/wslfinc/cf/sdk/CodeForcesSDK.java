@@ -108,6 +108,10 @@ public class CodeForcesSDK {
         return ContestantProcessing.getActiveContestants(contestId);
     }
 
+    public static List<Team> getActiveTeams(int contestId) {
+        return ContestantProcessing.getActiveTeams(contestId);
+    }
+
     /**
      *
      * @param contestId Id of the contest. It is not the round number. It can be

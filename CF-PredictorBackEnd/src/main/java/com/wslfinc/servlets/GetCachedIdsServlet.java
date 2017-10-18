@@ -18,6 +18,7 @@ public class GetCachedIdsServlet extends HttpServlet {
         try {
             PrintWriter out = response.getWriter();
             List<Integer> ids = CodeForcesSDK.getCachedIds();
+            out.write("Cached ids count: " + ids.size() + "\n");
             for (int id : ids) {
                 out.write(id + "\n");
             }

@@ -53,6 +53,18 @@ public class ContestantProcessing {
         return getActiveContestants(registredContestants, prevRating, rows);
     }
 
+    static ArrayList<Team> getActiveTeams(int contestId) {
+        List<Contestant> registredContestants = getAllContestants(contestId);
+        List<RanklistRow> rows = getRanklistRows(contestId);
+
+        Map<String, Integer> prevRating = new HashMap<>();
+        for (Contestant contestant : registredContestants) {
+            prevRating.put(contestant.getHandle(), contestant.getPrevRating());
+        }
+
+        return getActiveTeams(registredContestants, prevRating, rows);
+    }
+
     static List<Contestant> getActiveContestants(List<Contestant> oldCOntestants,
             Map<String, Integer> prevRating, List<RanklistRow> rows) {
         List<Contestant> active = new ArrayList<>();
@@ -71,5 +83,29 @@ public class ContestantProcessing {
 
         return active;
     }
+
+    static ArrayList<Team> getActiveTeams(List<Contestant> oldCOntestants,
+            Map<String, Integer> prevRating, List<RanklistRow> rows) {
+        ArrayList<Team> active = new ArrayList<>();
+        for (RanklistRow row : rows) {
+            ArrayList<Contestant> temates = new ArrayList<>();
+            for (Member member : row.getParty().getMembers()) {
+                String handle = member.getHandle();
+                if (!prevRating.containsKey(handle)) {
+                    prevRating.put(handle, INITIAL_RATING);
+                }
+
+                int prevR = prevRating.get(handle);
+                int rank = row.getRank();
+                temates.add(new Contestant(handle, rank, prevR));
+            }
+            String name = temates.size() == 1 ? temates.get(0).getHandle() :
+                    row.getParty().getTeamName();
+            active.add(new Team(temates, name));
+        }
+
+        return active;
+    }
+
 
 }

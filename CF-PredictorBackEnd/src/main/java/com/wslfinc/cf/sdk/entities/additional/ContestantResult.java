@@ -68,7 +68,7 @@ public class ContestantResult {
 
         JSONArray array = new JSONArray(list);
         JSONObject json = new JSONObject();
-        json.put("status", SUCCESSFUL_STATUS);
+        json.put(JSON_STATUS, SUCCESSFUL_STATUS);
         json.put(JSON_RESULTS, array);
 
         return json;

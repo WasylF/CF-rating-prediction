@@ -123,6 +123,7 @@ public class PastRatingDownloader {
 
     private static boolean validate(int maxId, String filePrefix) {
         boolean result = true;
+        /*
         List<Contest> contests = CodeForcesSDK.getFinishedContests(maxId, false);
         for (Contest contest : contests) {
             int contestId = contest.getId();
@@ -148,7 +149,7 @@ public class PastRatingDownloader {
                 result = false;
             }
         }
-
+*/
         return result;
     }
 }

@@ -20,7 +20,7 @@ public class ContestProcessor {
 
     public static ArrayList<Integer> getActiveContestIds() {
         // It's stub!!!
-        List<Integer> active = Arrays.asList(790, 791);
+        List<Integer> active = Arrays.asList(869);
 
         return new ArrayList<>(active);
     }
