@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>CF-Predictor</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-    <center> <img src='images/caption2.png' style="height:15vh;"/> </center>
+	<head>
+		<title>CF-Predictor</title>
 
-    <center><a href="contestSelector.jsp"><img src='images/yellow1.png' style="height:25vh;" onmouseover="this.src='images/yellow2.png';" onmouseout="this.src='images/yellow1.png';"></a></center>
-    <center><a href="https://chrome.google.com/webstore/detail/cf-predictor/ocfloejijfhhkkdmheodbaanephbnfhn"><img src='images/blue1.png' style="height:25vh;" onmouseover="this.src='images/blue2.png';" onmouseout="this.src='images/blue1.png';"></a></center>
-    <center><a href="http://codeforces.com/blog/entry/50411"><img src='images/red1.png' style="height:25vh;" onmouseover="this.src='images/red2.png';" onmouseout="this.src='images/red1.png';"></a></center>
-</body>
+		<link rel="stylesheet" type="text/css" href="index.css"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>CF-Predictor</h1>
+			</header>
+			<article>
+				<div class="container">
+					<a href="contestSelector.jsp" id="select"
+						<span>Select Contest</span>
+					</a>
+					<div id="download">
+						<span>Download Extension:</span>
+						<a href="https://chrome.google.com/webstore/detail/cf-predictor/ocfloejijfhhkkdmheodbaanephbnfhn">
+							<img src="https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/chrome-128.png"/>
+						</a>
+						<a href="https://addons.opera.com/en/extensions/details/cf-predictor/">
+							<img src="https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/firefox-128.png"/>
+						</a>
+						<a href="https://addons.mozilla.org/en-US/firefox/addon/cf-predictor/">
+							<img src="https://cdn1.iconfinder.com/data/icons/logotypes/32/opera-128.png"/>
+						</a>
+					</div>
+					<a href="http://codeforces.com/blog/entry/50411"  id="about">
+						<span>About</span>
+					</a>
+				</div>
+			</article>
+		</div>
+	</body>
 </html>
