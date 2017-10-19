@@ -1,60 +1,60 @@
 html, body {
-  height: 100vh;
-  width: 100vw;
-  margin: 0;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
 }
 
 header {
-  color: #444;
-  font: 1.5rem arial;
-  box-shadow: 0 0px 8px 0 rgba(0,0,0,.33);
-  z-index: 2;
+    color: #444;
+    font: 1.4rem arial;
+    box-shadow: 0 0px 8px 0 rgba(0,0,0,.33);
+    z-index: 2;
 }
 
 header h1 {
-  padding: 1.2rem;
-  font-family: courier;
-  font-weight: 100;
-  margin: 0;
+    padding: 1rem;
+    font-family: courier;
+    font-weight: 100;
+    margin: 0;
 }
 
 article {
-  padding: 1.2rem;
+    padding: 1.2rem;
 }
 
 h2, h3 {
-  font-family: Arial;
-  font-weight: 300;
+    font-family: Arial;
+    font-weight: 300;
 }
 
 table {
-  min-width: 100%;
-  font: 1rem Arial;
-  font-weight: 100;
-  border-spacing: 0;
+    min-width: 100%;
+    font: 1rem Arial;
+    font-weight: 100;
+    border-spacing: 0;
 }
 
 th {
-  padding: .6rem;
-  border-bottom: 2px solid #e3e3e3;
+    padding: .6rem;
+    border-bottom: 2px solid #e3e3e3;
 }
 
 td {
-  padding: .6rem;
-  border-bottom: 1px solid #e3e3e3;
+    padding: .6rem;
+    border-bottom: 1px solid #e3e3e3;
 }
 
-td:nth-child(n+5) {
-  text-align: center;
+td:nth-child(n+3) {
+    text-align: center;
 }
 td:nth-child(5):after {
-  content: "\2192";
-  float: right;
-  margin-right: calc(-1rem);
+    content: "\2192";
+    float: right;
+    margin-right: calc(-1rem);
 }
 tr:hover {
-  background: #eee;
+    background: #eee;
 }
 tr:last-child td {
-  border-bottom: 0 solid #000;
+    border-bottom: 0 solid #000;
 }
