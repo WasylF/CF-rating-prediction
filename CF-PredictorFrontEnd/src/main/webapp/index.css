@@ -1,0 +1,104 @@
+html, body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+header {
+  color: #444;
+  font: 1.5rem arial;
+  box-shadow: 0 0px 8px 0 rgba(0,0,0,.33);
+  z-index: 2;
+}
+
+header h1 {
+  padding: 1.2rem;
+  font-family: courier;
+  font-weight: 100;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+article {
+  flex: 1 auto;
+  height: 0px;
+}
+
+article .container {
+  flex-flow: row wrap;
+}
+
+article>.container>* {
+  flex: 1;
+}
+
+#download {
+  background: #fff;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+}
+
+#download>span {
+  color: #555;
+  font: 2rem Arial;
+  flex: 1 100%;
+  padding: 3vh 1.2rem 3vh;
+  border-bottom: 2px solid #ff9900;
+}
+
+#download a {
+  flex: 1 0px;
+  transition: .3s all;
+}
+#download a:hover {
+  background: #eee;
+}
+#download a:active {
+  background: #ddd;
+}
+
+#download img {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  padding: 10%;
+}
+
+article>.container>a {
+  padding: 1.2em .5em;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  font: 3rem Arial;
+  z-index: 1;
+  transition: .3s all;
+}
+
+#select {
+  background: #99ee99;
+}
+#select:hover {
+  background: #79e289;
+}
+#select:active {
+  background: #69d279;
+}
+
+#about {
+  background: #aadeff;
+}
+#about:hover {
+  background: #9aceef;
+}
+#about:active {
+  background: #8abedf;
+}
