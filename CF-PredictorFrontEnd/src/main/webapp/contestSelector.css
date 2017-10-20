@@ -1,6 +1,6 @@
 html, body {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     margin: 0;
 }
 
@@ -72,5 +72,5 @@ input:hover {
     background: #0069d9;
 }
 input:active {
-    background: #0069cc;
+    background: #0062cc;
 }

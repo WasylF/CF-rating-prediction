@@ -51,7 +51,6 @@
                         <th>Seed</th>
                         <th>Previous rating</th>
                         <th>Expecting new rating</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,10 +58,8 @@
                         for (Object contestanRes : newRating) {
                             JSONObject cr = (JSONObject) contestanRes;
                             int delta = cr.getInt("newRating") - cr.getInt("oldRating");
-                            double x = Math.min(Math.abs(delta), 142);
-                            double opacity = x / 150. + 0.05;
-                            if(delta == 0)
-                                opacity = 0;
+                            double x = Math.min(delta, 142);
+                            double opacity = Math.abs(x) / 150. + 0.05;
                     %>
                     <tr>
                         <td> <%= cr.getInt("rank")%> </td>
