@@ -51,7 +51,6 @@
                         <th>Seed</th>
                         <th>Previous rating</th>
                         <th>Expecting new rating</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
