@@ -25,23 +25,23 @@ public class PastRatingDownloader {
         return validate(maxId, filePrefix) && result;
     }
 
-    public static Map<String, Integer> loadRatingFromId(int loadContestId, String filePrefix) {
+    public static TreeMap<String, Integer> loadRatingFromId(int loadContestId, String filePrefix) {
         if (loadContestId > 0) {
             try {
                 String path = "file://" + getFileName("" + loadContestId, filePrefix);
                 JSONObject json = JsonReader.read(path);
-                return toMap(json);
+                return new TreeMap<>(toMap(json));
             } catch (Exception ex) {
                 System.err.println(ex.toString());
             }
         }
 
-        return new HashMap<>();
+        return new TreeMap<>();
     }
 
     public static boolean getRatingBeforeContest(int loadFromId, int maxId, String filePrefix) {
         List<Contest> contests = CodeForcesSDK.getFinishedContests(maxId, false);
-        Map<String, Integer> rating = loadRatingFromId(loadFromId, filePrefix);
+        TreeMap<String, Integer> rating = loadRatingFromId(loadFromId, filePrefix);
         boolean loaded = false;
 
         boolean result = true;
@@ -68,7 +68,7 @@ public class PastRatingDownloader {
         return result;
     }
 
-    private static JSONObject toJSON(Map<String, Integer> rating) {
+    private static JSONObject toJSON(TreeMap<String, Integer> rating) {
         List<JSONObject> list = new ArrayList<>(rating.size());
 
         for (String handle : rating.keySet()) {
@@ -89,13 +89,13 @@ public class PastRatingDownloader {
         return filePrefix + "/contest_" + contestId + ".html";
     }
 
-    private static boolean writeToFiles(String filePrefix, Map<String, Integer> rating, String contestId) {
+    private static boolean writeToFiles(String filePrefix, TreeMap<String, Integer> rating, String contestId) {
         boolean result = true;
         String fileName = getFileName(contestId, filePrefix);
         JSONObject json = toJSON(rating);
 
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
-            json.write(writer);
+            json.write(writer, 2, 0);
             writer.write("\n");
         } catch (Exception ex) {
             System.err.println("Couldn't write past rating to the file\n"
@@ -149,7 +149,7 @@ public class PastRatingDownloader {
                 result = false;
             }
         }
-*/
+         */
         return result;
     }
 }
