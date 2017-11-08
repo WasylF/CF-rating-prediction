@@ -10,6 +10,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.github.wslf.datastructures.cache.Cacheable;
+import com.github.wslf.utils.web.WebReader;
 
 /**
  *
@@ -17,6 +18,7 @@ import com.github.wslf.datastructures.cache.Cacheable;
  */
 public class ContestantsCached extends Cacheable<List<Contestant>, Integer> {
 
+    private static final WebReader webReader = new WebReader();
     public ContestantsCached() {
         // TTL 1 day
         super(10, 2, 24 * 60 * 60 * 1000);
@@ -26,6 +28,9 @@ public class ContestantsCached extends Cacheable<List<Contestant>, Integer> {
     public List<Contestant> getValueManually(Integer key) {
         try {
             String url = PAST_RATING_URL_PREFIX + key + PAST_RATING_URL_SUFFIX;
+            if (!webReader.isExists(url)) {
+                url = PAST_RATING_URL_PREFIX + "current" + PAST_RATING_URL_SUFFIX;
+            }
             JSONObject response = JsonReader.read(url);
             if (ResponseChecker.isValid(response)) {
                 JSONArray contestants = response.getJSONArray(JSON_RESULTS);
