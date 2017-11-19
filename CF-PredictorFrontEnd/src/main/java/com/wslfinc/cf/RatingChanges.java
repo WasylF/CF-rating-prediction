@@ -15,7 +15,7 @@ public class RatingChanges extends Cacheable<String, Integer> {
     }
 
     @Override
-    public synchronized String getValueManually(Integer contestId) {
+    public String getValueManually(Integer contestId) {
         System.out.println("Updating rating prediction for contest " + contestId + " time " + System.currentTimeMillis());
         String requestURL = BACK_END_URL + "/GetNextRatingServlet?contestId=" + contestId;
         try {

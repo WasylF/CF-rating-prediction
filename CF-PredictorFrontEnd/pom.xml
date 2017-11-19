@@ -4,7 +4,7 @@
 
     <groupId>com.wslfinc</groupId>
     <artifactId>CF-PredictorFrontEnd</artifactId>
-    <version>0.8.1.Heroku</version>
+    <version>0.8.3.Heroku</version>
     <packaging>war</packaging>
 
     <name>CF-PredictorFrontEnd</name>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.github.wslf</groupId>
             <artifactId>DataStructures</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.wslf</groupId>

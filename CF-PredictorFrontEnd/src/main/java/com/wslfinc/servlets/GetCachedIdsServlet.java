@@ -18,6 +18,7 @@ public class GetCachedIdsServlet extends HttpServlet {
         try {
             PrintWriter out = response.getWriter();
             List<Integer> ids = RatingGetter.getCachedIds();
+            out.write("There are " + ids.size() + " cached contests: \n");
             for (int id : ids) {
                 out.write(id + "\n");
             }

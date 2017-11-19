@@ -24,10 +24,10 @@ public class AdditionalExecutor {
 
     public static void main(String[] args) throws Exception {
         //args = new String[]{"getPastRating", "767"};
-        //args = new String[]{"getPastRating", "900", "865"};
+        args = new String[]{"getPastRating", "900", "887"};
         //args = new String[]{"testRating", "868", "868"};//592
         //args = new String[]{"matchesIdToNames", "false"};
-        args = new String[]{"calcGetNext", "875", "876"};
+        //args = new String[]{"calcGetNext", "891", "892"};
 
         switch (args[0]) {
             case "getPastRating":
@@ -93,7 +93,7 @@ public class AdditionalExecutor {
         contestNames.put("status", "OK");
         contestNames.put("result", new JSONArray(list));
 
-        String fileName = PATH_TO_PROJECT + "/contests/contestNames.json";
+        String fileName = "contests/contestNames.json";
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName))) {
             contestNames.write(writer);
             writer.write("\n");
@@ -112,7 +112,7 @@ public class AdditionalExecutor {
         for (int id = minId; id <= maxId; id++) {
             try {
                 String json = reader.read("http://localhost:8084/CF-PredictorBackEnd/GetNextRatingServlet?contestId=" + id);
-                String fileName = PATH_TO_PROJECT + "/nextRating/contest_" + id + ".html";
+                String fileName = "nextRating/contest_" + id + ".html";
                 writer.write(json, fileName);
                 if (json.length() > 1000) {
                     System.out.println("GetNextRating for contest " + id + " has been written successful");

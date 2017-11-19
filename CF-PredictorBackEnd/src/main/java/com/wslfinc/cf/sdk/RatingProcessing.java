@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class RatingProcessing {
 
-    private static volatile NewRatingCached newRatings = new NewRatingCached(300_000);
+    private static volatile NewRatingCached newRatings = new NewRatingCached(30_000);
 
     /**
      * Calculates rating after round {@code  contestId}
@@ -20,9 +20,7 @@ public class RatingProcessing {
      */
     public static List<ContestantResult> getNewRatings(int contestId) {
         List<ContestantResult> result = null;
-        synchronized (newRatings) {
-            result = newRatings.getValue(contestId);
-        }
+        result = newRatings.getValue(contestId);
         return result;
     }
 
