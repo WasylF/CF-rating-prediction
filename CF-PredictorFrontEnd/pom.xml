@@ -4,7 +4,7 @@
 
     <groupId>com.wslfinc</groupId>
     <artifactId>CF-PredictorFrontEnd</artifactId>
-    <version>0.8.3.Heroku</version>
+    <version>0.8.3.Heroku-90sec</version>
     <packaging>war</packaging>
 
     <name>CF-PredictorFrontEnd</name>

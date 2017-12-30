@@ -1,4 +1,4 @@
-![alt tag](https://github.com/WslF/CF-rating-prediction/blob/master/Files/icon1024.png?raw=true)
+![CF-Predictor-logo](https://github.com/WslF/CF-rating-prediction/blob/master/Files/CF-Predictor-icons/icon1024.png?raw=true)
 
 A huge number of your nerve cells die every time when you wait for a rating update on Codeforces. Stop this! From now you could use this service, it calculates approximate rating changes for every contestant.
 

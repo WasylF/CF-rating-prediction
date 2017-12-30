@@ -12,6 +12,7 @@ import java.util.Comparator;
  *
  * @author Wsl_F
  */
+@Deprecated
 public class RatingCalculator {
 
     private int minDelta = 300;
@@ -80,7 +81,7 @@ public class RatingCalculator {
         for (Contestant opponent : allContestants) {
             if (contestant != opponent) {
                 seed += getEloWinProbability(opponent.getPrevRating(), rating);
-            } 
+            }
         }
 
         return seed;
@@ -168,7 +169,7 @@ public class RatingCalculator {
         if (numberOfContestants < 2) {
             return new ArrayList<>();
         }
-        
+
         ArrayList<Integer> deltas = calculateDeltas();
 
         List<ContestantResult> results = new ArrayList<>(numberOfContestants);

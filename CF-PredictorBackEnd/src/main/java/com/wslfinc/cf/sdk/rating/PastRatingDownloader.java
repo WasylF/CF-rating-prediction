@@ -4,6 +4,7 @@ import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.CodeForcesSDK;
 import com.wslfinc.cf.sdk.entities.Contest;
 import com.wslfinc.cf.sdk.entities.RatingChange;
+import com.wslfinc.cf.sdk.entities.additional.ContestantResult;
 import com.wslfinc.helpers.web.JsonReader;
 import java.io.BufferedWriter;
 import java.nio.file.Files;
@@ -57,15 +58,26 @@ public class PastRatingDownloader {
                 result = false;
                 System.err.println("Couldn't write rating after contest " + contestId);
             }
-
-            List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
-            for (RatingChange ratingChange : ratingChanges) {
-                rating.put(ratingChange.getHandle(), ratingChange.getNewRating());
-            }
+            addFromCF(contestId, rating);
+            //addFromPredictor(contestId, rating);
         }
 
         result &= writeToFiles(filePrefix, rating, "current");
         return result;
+    }
+
+    private static void addFromCF(int contestId, TreeMap<String, Integer> rating) {
+        List<RatingChange> ratingChanges = CodeForcesSDK.getRatingChanges(contestId);
+        for (RatingChange ratingChange : ratingChanges) {
+            rating.put(ratingChange.getHandle(), ratingChange.getNewRating());
+        }
+    }
+
+    private static void addFromPredictor(int contestId, TreeMap<String, Integer> rating) {
+        List<ContestantResult> ratingChanges = CodeForcesSDK.getNewRatings(contestId);
+        for (ContestantResult ratingChange : ratingChanges) {
+            rating.put(ratingChange.getHandle(), ratingChange.getNextRating());
+        }
     }
 
     private static JSONObject toJSON(TreeMap<String, Integer> rating) {

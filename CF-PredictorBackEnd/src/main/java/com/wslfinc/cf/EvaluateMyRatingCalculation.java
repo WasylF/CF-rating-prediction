@@ -22,7 +22,8 @@ public class EvaluateMyRatingCalculation {
 
         for (int contestId = minContestId; contestId <= maxContestId; contestId++) {
             Contest contest = CodeForcesSDK.getContest(contestId);
-            if (contest.getType() == ContestType.CF) {
+            /*if (contest.getType() == ContestType.CF) */
+            {
                 List<ContestantResult> predictedRating
                         = CodeForcesSDK.getNewRatings(contestId);
                 List<RatingChange> realRating

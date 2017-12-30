@@ -4,9 +4,11 @@ import static com.wslfinc.cf.sdk.CodeForcesSDK.*;
 import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.entities.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  *
@@ -91,5 +93,10 @@ public class ContestProcessing {
         }
 
         return result;
+    }
+
+    public static boolean isEducational(int contestId) {
+        TreeSet<Integer> edu = new TreeSet<>(Arrays.asList(911, 893));
+        return edu.contains(contestId);
     }
 }
