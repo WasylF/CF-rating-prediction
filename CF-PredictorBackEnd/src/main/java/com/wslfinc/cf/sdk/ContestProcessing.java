@@ -4,11 +4,10 @@ import static com.wslfinc.cf.sdk.CodeForcesSDK.*;
 import static com.wslfinc.cf.sdk.Constants.*;
 import com.wslfinc.cf.sdk.entities.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -95,8 +94,18 @@ public class ContestProcessing {
         return result;
     }
 
+    private static ConcurrentHashMap<Integer, Boolean> educational
+            = new ConcurrentHashMap<>();
+
     public static boolean isEducational(int contestId) {
-        TreeSet<Integer> edu = new TreeSet<>(Arrays.asList(911, 893));
-        return edu.contains(contestId);
+        if (educational.containsKey(contestId)) {
+            return educational.get(contestId);
+        }
+
+        Contest contest = getContest(contestId);
+        boolean r = contest.getName().contains("Educational");
+        educational.put(contestId, r);
+
+        return r;
     }
 }
