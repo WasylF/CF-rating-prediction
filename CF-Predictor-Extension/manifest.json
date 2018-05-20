@@ -3,7 +3,7 @@
 	
 	"short_name": "CF-Predictor",
 	
-	"version": "1.2.1",
+	"version": "1.2.2",
 	
 	"description": "This extension predicts rating changes for Codeforces. It shows approximate deltas during and after the contest.",
 	
@@ -15,7 +15,20 @@
 		"64": "static/icon64.png", 
 		"128": "static/icon128.png"
 	},
-	
+
+	"browser_action":
+	{
+		"default_icon": 
+		{
+			"48": "static/icon48.png",
+			"64": "static/icon64.png", 
+			"128": "static/icon128.png"
+		},
+
+		"default_title": "CF-Predictor",
+		"default_popup": "popup.html"
+	},
+
 	"permissions":
 	[
 		"http://cf-predictor.us-west-2.elasticbeanstalk.com/",
