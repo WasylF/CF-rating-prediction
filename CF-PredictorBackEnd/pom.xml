@@ -4,7 +4,7 @@
 
     <groupId>com.wslfinc</groupId>
     <artifactId>CF-PredictorBackEnd</artifactId>
-    <version>0.8.6-GoodBye2017</version>
+    <version>0.8.8</version>
     <packaging>war</packaging>
 
     <name>CF-PredictorBackEnd</name>

@@ -35,7 +35,7 @@ public class RatingCalculatorTeam {
         this.numberOfContestants = allContestants.size();
         recalculateRanks();
         Collections.sort(this.allContestants);
-        Collections.reverse(allContestants);
+        Collections.reverse(this.allContestants);
     }
 
     public static RatingCalculatorTeam getRatingCalculator(int contestId) {
