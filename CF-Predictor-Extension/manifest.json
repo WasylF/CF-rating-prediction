@@ -3,7 +3,7 @@
 	
 	"short_name": "CF-Predictor",
 	
-	"version": "1.2.2",
+	"version": "1.2.3",
 	
 	"description": "This extension predicts rating changes for Codeforces. It shows approximate deltas during and after the contest.",
 	
@@ -31,7 +31,6 @@
 
 	"permissions":
 	[
-		"http://cf-predictor.us-west-2.elasticbeanstalk.com/",
 		"https://cf-predictor-frontend.herokuapp.com/"
 	],
 	
@@ -39,7 +38,11 @@
 	[
 		{
 			"js": ["third_party/jquery.js", "showDeltas.js"],
-			"matches": ["http://codeforces.com/contest/*/standings*"]
+			"matches": 
+			[
+				"http://codeforces.com/contest/*/standings*", 
+				"https://codeforces.com/contest/*/standings*"
+			]
 		}
 	]	
 }
