@@ -43,7 +43,7 @@ public class UserAPITest {
         String rank_received = user.getRank();
         assertEquals(rank_expected, rank_received);
 
-        int maxRating_expected = 2007;
+        int maxRating_expected = 2018;
         int maxRating_received = user.getMaxRating();
         assertEquals(maxRating_expected, maxRating_received);
 

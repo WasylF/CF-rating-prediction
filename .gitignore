@@ -4,4 +4,7 @@
 /CF-PredictorFrontEnd/target/
 /CF-PredictorBackEnd/target/
 /CF-PredictorBackEnd/contests/
+CF-PredictorBackEnd/nextRating/*
 /keys/
+CF-PredictorBackEnd/.idea/
+*.iml
