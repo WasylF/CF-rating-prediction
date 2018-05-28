@@ -99,7 +99,7 @@ public class ContestantProcessing {
                 
                 int prevR = prevRating.get(handle);
                 int rank = row.getRank();
-                if (ContestProcessing.isEducational(contestId) && prevR >= 1900) {
+                if (ContestProcessing.isEducational(contestId) && prevR >= MAX_RATING_EDUCATIONAL_PARTICIPANT) {
                     temates.clear();
                     break;
                 }

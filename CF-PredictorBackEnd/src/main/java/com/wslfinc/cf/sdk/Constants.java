@@ -46,4 +46,6 @@ public class Constants {
     public static final int MAXIMAL_CONTESTANTS = 10_000;
 
     public static final int MAX_CONTEST_ID = 10_0000;
+
+    public static final int MAX_RATING_EDUCATIONAL_PARTICIPANT = 2100;
 }
