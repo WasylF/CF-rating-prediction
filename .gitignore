@@ -6,5 +6,5 @@
 /CF-PredictorBackEnd/contests/
 CF-PredictorBackEnd/nextRating/*
 /keys/
-CF-PredictorBackEnd/.idea/
+*/.idea/*
 *.iml

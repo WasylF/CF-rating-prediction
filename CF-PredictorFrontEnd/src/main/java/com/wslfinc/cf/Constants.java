@@ -9,7 +9,7 @@ import org.json.JSONObject;
 public class Constants {
 
     public static final String BACK_END_URL
-            = "http://207.244.96.7:8080/CF-PredictorBackEnd-0.8.7/";
+            = "http://207.244.96.7:8080/CF-PredictorBackEnd/";
             // = "https://cf-predictor-backend.herokuapp.com";
     // = "http://cf-predictor-backend.us-west-2.elasticbeanstalk.com";
     // = "http://localhost:8084/CF-PredictorBackEnd/";
