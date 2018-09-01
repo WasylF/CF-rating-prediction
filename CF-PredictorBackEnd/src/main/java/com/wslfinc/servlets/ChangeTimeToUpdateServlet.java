@@ -16,7 +16,7 @@ public class ChangeTimeToUpdateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         String result;
         try {
-            long timeToUpdate = Integer.valueOf(request.getParameter("timeToUpdate"));
+            int timeToUpdate = Integer.valueOf(request.getParameter("timeToUpdate"));
             CodeForcesSDK.changeTimeToUodate(timeToUpdate);
             result = "Updating time changed to " + timeToUpdate + " milliseconds";
         } catch (Exception ex) {

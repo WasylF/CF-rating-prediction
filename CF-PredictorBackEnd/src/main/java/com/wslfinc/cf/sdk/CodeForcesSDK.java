@@ -177,7 +177,7 @@ public class CodeForcesSDK {
         RatingProcessing.removeFromCache(contestId);
     }
 
-    public static void changeTimeToUodate(long timeToUpdateMS) {
+    public static void changeTimeToUodate(int timeToUpdateMS) {
         RatingProcessing.changeTimeToUpdate(timeToUpdateMS);
     }
 }

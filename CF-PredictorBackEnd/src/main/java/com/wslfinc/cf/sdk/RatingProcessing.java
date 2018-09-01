@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class RatingProcessing {
 
-    private static volatile NewRatingCached newRatings = new NewRatingCached(30_000);
+    private static volatile NewRatingCached newRatings = new NewRatingCached(10);
 
     /**
      * Calculates rating after round {@code  contestId}
@@ -19,7 +19,7 @@ public class RatingProcessing {
      * @return nextRating for all contestants
      */
     public static List<ContestantResult> getNewRatings(int contestId) {
-        List<ContestantResult> result = null;
+        List<ContestantResult> result;
         result = newRatings.getValue(contestId);
         return result;
     }
@@ -32,7 +32,7 @@ public class RatingProcessing {
         newRatings.remove(contestId);
     }
 
-    public static void changeTimeToUpdate(long timeToUpdate) {
+    public static void changeTimeToUpdate(int timeToUpdate) {
         newRatings = new NewRatingCached(timeToUpdate);
     }
 }
