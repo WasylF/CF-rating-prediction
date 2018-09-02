@@ -7,7 +7,7 @@ html, body {
 header {
     color: #444;
     font: 1.4rem arial;
-    box-shadow: 0 0px 8px 0 rgba(0,0,0,.33);
+    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, .33);
     z-index: 2;
 }
 
@@ -28,7 +28,7 @@ article {
     padding: 1.2rem;
 }
 
-h2 {  
+h2 {
     color: #555;
     font: 1.5rem Arial;
     flex: 1 100%;
@@ -47,7 +47,7 @@ select {
     background-color: #fff;
     background-image: none;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, .15);
     border-radius: .25rem;
     transition: .3s all;
 }
@@ -68,9 +68,11 @@ input {
     color: #fff;
     background: #007bff;
 }
+
 input:hover {
     background: #0069d9;
 }
+
 input:active {
     background: #0062cc;
 }

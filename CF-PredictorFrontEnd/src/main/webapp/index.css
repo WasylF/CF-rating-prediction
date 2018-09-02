@@ -7,7 +7,7 @@ html, body {
 header {
     color: #444;
     font: 1.4rem arial;
-    box-shadow: 0 0px 8px 0 rgba(0,0,0,.33);
+    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, .33);
     z-index: 2;
 }
 
@@ -33,7 +33,7 @@ article .container {
     flex-flow: row wrap;
 }
 
-article>.container>* {
+article > .container > * {
     flex: 1;
 }
 
@@ -44,7 +44,7 @@ article>.container>* {
     align-items: flex-start;
 }
 
-#download>span {
+#download > span {
     color: #555;
     font: 2rem Arial;
     flex: 1 100%;
@@ -56,9 +56,11 @@ article>.container>* {
     flex: 1 0px;
     transition: .3s all;
 }
+
 #download a:hover {
     background: #eee;
 }
+
 #download a:active {
     background: #ddd;
 }
@@ -70,7 +72,7 @@ article>.container>* {
     padding: 10%;
 }
 
-article>.container>a {
+article > .container > a {
     padding: 1.2em .5em;
     display: flex;
     align-items: center;
@@ -86,9 +88,11 @@ article>.container>a {
 #select {
     background: #99ee99;
 }
+
 #select:hover {
     background: #79e289;
 }
+
 #select:active {
     background: #69d279;
 }
@@ -96,9 +100,11 @@ article>.container>a {
 #about {
     background: #aadeff;
 }
+
 #about:hover {
     background: #9aceef;
 }
+
 #about:active {
     background: #8abedf;
 }

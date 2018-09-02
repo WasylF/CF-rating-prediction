@@ -7,7 +7,7 @@ html, body {
 header {
     color: #444;
     font: 1.4rem arial;
-    box-shadow: 0 0px 8px 0 rgba(0,0,0,.33);
+    box-shadow: 0 0px 8px 0 rgba(0, 0, 0, .33);
     z-index: 2;
 }
 
@@ -47,14 +47,17 @@ td {
 td:nth-child(n+3) {
     text-align: center;
 }
+
 td:nth-child(5):after {
     content: "\2192";
     float: right;
     margin-right: calc(-1rem);
 }
+
 tr:hover {
     background: #eee;
 }
+
 tr:last-child td {
     border-bottom: 0 solid #000;
 }
