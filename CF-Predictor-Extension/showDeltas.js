@@ -67,9 +67,11 @@ function getDeltas(contestId, callback) {
 	var herokuServer = "https://cf-predictor-frontend.herokuapp.com/";
 	var page = 	"GetNextRatingServlet?contestId=" + contestId;
 
-		var server = herokuServer + page;
-		$.getJSON(server, function(data) {
-			for (var i = 0; i < data.result.length; i++) {
+	var server = herokuServer + page;
+        		
+	chrome.runtime.sendMessage({url: server}, function(data) {
+		data = JSON.parse(data);
+		for (var i = 0; i < data.result.length; i++) {
 				var handle = data.result[i].handle;
 				var delta = data.result[i].newRating - data.result[i].oldRating;
 				var rank = data.result[i].rank;
@@ -83,7 +85,8 @@ function getDeltas(contestId, callback) {
 				results[handle] = res;
 			}
 			callback();
-		});
+	
+	});
 }
 
 
