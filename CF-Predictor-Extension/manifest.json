@@ -3,7 +3,7 @@
 	
 	"short_name": "CF-Predictor",
 	
-	"version": "1.2.3",
+	"version": "1.2.4",
 	
 	"description": "This extension predicts rating changes for Codeforces. It shows approximate deltas during and after the contest.",
 	
