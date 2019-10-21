@@ -1,4 +1,4 @@
-<%-- 
+<%--
         Document   : roundResults
         Created on : Feb 7, 2017, 8:01:12 PM
         Author     : Wsl_F
@@ -64,8 +64,9 @@
         <tr>
             <td><%= cr.getInt("rank")%>
             </td>
-            <td><%= cr.getString("handle")%>
-            </td>
+            <td><a href="https://codeforces.com/profile/<%= cr.getString("handle")%>">
+                <%= cr.getString("handle")%>
+            </a></td>
             <td style='background-color:rgba(<%= (delta >= 0 ? "0,255,0" : "255,0,0")%>, <%= opacity%>)'><%= delta%>
             </td>
             <td><%= (int) cr.getDouble("seed")%>
