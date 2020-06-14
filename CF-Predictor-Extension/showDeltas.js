@@ -49,7 +49,10 @@ function showDeltas() {
 	var count = $(".standings").find("tr").length;
 	if (count > 2) {
 		var contestId = document.location.href.replace(/\D+/ig, ',').substr(1).split(',')[0];
-		getDeltas(contestId, function() {
+		var contestants = document.getElementsByClassName("contestant-cell");
+		var contestantsHandles = Array.from(contestants).map(x => x.innerText.trim());
+
+		getDeltas(contestId, contestantsHandles, function() {
 			$(".standings").find("tr").first().find("th").last().removeClass("right");
 			$(".standings").find("tr").find("td").removeClass("right");
 			$(".standings").find("tr").each(modifyPartyHtml);
@@ -62,31 +65,53 @@ function showDeltas() {
 	}
 }
 
-function getDeltas(contestId, callback) {
-	//var localServer = "http://localhost:8084/CF-PredictorFrontEnd/"
-	var herokuServer = "https://cf-predictor-frontend.herokuapp.com/";
-	var page = 	"GetNextRatingServlet?contestId=" + contestId;
+function parseDeltas(data, callback) {
+    for (var i = 0; i < data.result.length; i++) {
+        var handle = data.result[i].handle;
+        var delta = data.result[i].newRating - data.result[i].oldRating;
+		var rank = data.result[i].rank;
+		var seed = data.result[i].seed;
 
-	var server = herokuServer + page;
-        		
-	chrome.runtime.sendMessage({url: server}, function(data) {
-		data = JSON.parse(data);
-		for (var i = 0; i < data.result.length; i++) {
-				var handle = data.result[i].handle;
-				var delta = data.result[i].newRating - data.result[i].oldRating;
-				var rank = data.result[i].rank;
-				var seed = data.result[i].seed;
+		var res = {
+    		delta : parseInt(delta),
+	    	seed : parseInt(seed),
+			rank : parseInt(rank)
+		};
 
-				var res = {
-					delta : parseInt(delta),
-					seed : parseInt(seed),
-					rank : parseInt(rank)
-				};
-				results[handle] = res;
-			}
-			callback();
-	
-	});
+		results[handle] = res;
+	}
+
+	callback();
+}
+
+function getDeltas(contestId, contestantsHandles, callback) {
+	// var localServer = "http://localhost:8080/"
+	var herokuServerOld = "https://cf-predictor-frontend.herokuapp.com/";
+	var pageOld = "GetNextRatingServlet?contestId=" + contestId;
+	var serverOld = herokuServerOld + pageOld;
+
+	var herokuServerNew = "https://cf-predictor.herokuapp.com/";
+	var pageNew = "GetPartialRatingChangesServlet?contestId=" + contestId + "&handles="+contestantsHandles.join(",");
+	var serverNew = herokuServerNew + pageNew;
+
+
+	chrome.runtime.sendMessage({url: serverNew}, function(data) {
+	    try {
+	        data = JSON.parse(data);
+	        parseDeltas(data, callback);
+	    } catch(err) {
+	        console.log(err);
+
+	        chrome.runtime.sendMessage({url: serverOld}, function(data) {
+            	    try {
+            	        data = JSON.parse(data);
+            	        parseDeltas(data, callback);
+            	    } catch(err) {
+            	        console.log(err)
+            	    }
+                });
+	    }
+    });
 }
 
 
