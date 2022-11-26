@@ -37,12 +37,6 @@ function modifyPartyHtml(index, elem) {
 
 	partyNum++;
 	$(elem).append(text);
-	/*
-	text = "<td class='" + darkClass + "right'><span style='color:green;'>" + rank + "</span></td>";
-	$(elem).append(text);
-	text = "<td class='" + darkClass + "right'><span style='color:green;'>" + seed + "</span></td>";
-	$(elem).append(text);
-	*/
 }
 
 function showDeltas() {
@@ -85,31 +79,17 @@ function parseDeltas(data, callback) {
 }
 
 function getDeltas(contestId, contestantsHandles, callback) {
-	// var localServer = "http://localhost:8080/"
-	var herokuServerOld = "https://cf-predictor-frontend.herokuapp.com/";
-	var pageOld = "GetNextRatingServlet?contestId=" + contestId;
-	var serverOld = herokuServerOld + pageOld;
-
-	var herokuServerNew = "https://cf-predictor.herokuapp.com/";
-	var pageNew = "GetPartialRatingChangesServlet?contestId=" + contestId + "&handles="+contestantsHandles.join(",");
-	var serverNew = herokuServerNew + pageNew;
+	var endpoint = "https://cf-predictor.wasylf.xyz/GetPartialRatingChangesServlet?";
+	var params = "contestId=" + contestId + "&handles=" + contestantsHandles.join(",");
+	var request = endpoint + params;
 
 
-	chrome.runtime.sendMessage({url: serverNew}, function(data) {
+	chrome.runtime.sendMessage({url: request}, function(data) {
 	    try {
 	        data = JSON.parse(data);
 	        parseDeltas(data, callback);
 	    } catch(err) {
 	        console.log(err);
-
-	        chrome.runtime.sendMessage({url: serverOld}, function(data) {
-            	    try {
-            	        data = JSON.parse(data);
-            	        parseDeltas(data, callback);
-            	    } catch(err) {
-            	        console.log(err)
-            	    }
-                });
 	    }
     });
 }
